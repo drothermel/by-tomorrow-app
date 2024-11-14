@@ -5,16 +5,15 @@
 <div class="container flex flex-col mx-auto px-4 py-4 sm:px-6 lg:px-20">
 	<!--Header-->
 	<div class="flex flex-col mx-auto p-6">
-		<h1 class="text-5xl font-bold mb-4 text-center">By Tomorrow</h1>
-		<p class="text-lg mx-auto text-center px-4">
-			An app to manage your research sources, thoughts, and quickly produce
-			synthesized output from them.
-		</p>
+		<h1 class="text-center">By Tomorrow</h1>
+		<h4 class="mx-auto text-center py-4 px-8 sm:px-10 lg:px-20">
+			Quickly manage your research sources, thoughts and docs.
+		</h4>
 	</div>
 
 	<!--Descriptions-->
 	<div class="flex flex-col mx-auto px-4 sm:px-6 lg:px-10">
-		<h3 class="text-2xl font-semibold mb-0">Features:</h3>
+		<h2 class="text-left border-b-0 font-semibold px-4 mb-0">Features:</h2>
 		<!--Mode Options-->
 		<div class="flex flex-col mx-auto gap-y-4 gap-x-8 px-4 sm:px-6 lg:px-8">
 			<!-- Library Mode-->
