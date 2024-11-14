@@ -45,6 +45,9 @@ importers:
       '@skeletonlabs/skeleton':
         specifier: ^2.10.3
         version: 2.10.3(svelte@5.1.16)
+      '@skeletonlabs/tw-plugin':
+        specifier: ^0.4.0
+        version: 0.4.0(tailwindcss@3.4.14)
       '@sveltejs/adapter-auto':
         specifier: ^3.3.1
         version: 3.3.1(@sveltejs/kit@2.8.1(@sveltejs/vite-plugin-svelte@4.0.0(svelte@5.1.16)(vite@5.0.3(@types/node@22.9.0)))(svelte@5.1.16)(vite@5.0.3(@types/node@22.9.0)))
@@ -814,6 +817,11 @@ packages:
     resolution: {integrity: sha512-O1RecF68zEVvZl3GgRS4emqWMUIQLHvTOFoqGOw/2OXCPE06IxUQrHQf2hnxCPxtGZNXY2YX8UNV38l+eH8GNQ==}
     peerDependencies:
       svelte: ^3.56.0 || ^4.0.0 || ^5.0.0
+
+  '@skeletonlabs/tw-plugin@0.4.0':
+    resolution: {integrity: sha512-v6Y4deBq9ByRx3kTRGgekhhYkWEYgNNNu8UXOwJngCStB7w8SwmbNFSeHkluxMbgCgMnJyp220EMpw9nj/rEsQ==}
+    peerDependencies:
+      tailwindcss: '>=3.0.0'
 
   '@sveltejs/adapter-auto@3.3.1':
     resolution: {integrity: sha512-5Sc7WAxYdL6q9j/+D0jJKjGREGlfIevDyHSQ2eNETHcB1TKlQWHcAo8AS8H1QdjNvSXpvOwNjykDUHPEAyGgdQ==}
@@ -3086,6 +3094,10 @@ snapshots:
     dependencies:
       esm-env: 1.0.0
       svelte: 5.1.16
+
+  '@skeletonlabs/tw-plugin@0.4.0(tailwindcss@3.4.14)':
+    dependencies:
+      tailwindcss: 3.4.14
 
   '@sveltejs/adapter-auto@3.3.1(@sveltejs/kit@2.8.1(@sveltejs/vite-plugin-svelte@4.0.0(svelte@5.1.16)(vite@5.0.3(@types/node@22.9.0)))(svelte@5.1.16)(vite@5.0.3(@types/node@22.9.0)))':
     dependencies:

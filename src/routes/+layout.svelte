@@ -4,9 +4,8 @@
 	import Heading from './heading.svelte'
 	import Footer from './footer.svelte'
 
-	import '@skeletonlabs/skeleton/themes/theme-crimson.css'
-	import '@skeletonlabs/skeleton/styles/all.css'
 	import '../app.postcss'
+	import '../app.css'
 
 	handleSession(page)
 </script>
