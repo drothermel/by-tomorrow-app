@@ -2,6 +2,17 @@
 	import { Button } from '$lib/components/ui/button/index'
 </script>
 
+<!--Header -->
+<nav class="bg-gray-800 p-4">
+	<div class="max-w-7xl mx-auto flex space-x-4 sm:space-x-8">
+		<a href="/" class="text-white hover:text-gray-300">Home</a>
+		<a href="/files" class="text-white hover:text-gray-300">File Manager</a>
+		<a href="/library" class="text-white hover:text-gray-300">Library</a>
+		<a href="/preview" class="text-white hover:text-gray-300">Reader</a>
+		<a href="/editor" class="text-white hover:text-gray-300">Editor</a>
+	</div>
+</nav>
+
 <div class="container flex flex-col mx-auto px-4 py-4 sm:px-6 lg:px-20">
 	<!--Header-->
 	<div class="flex flex-col mx-auto p-6">
