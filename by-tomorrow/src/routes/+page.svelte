@@ -14,7 +14,7 @@
 
 	<!--Descriptions-->
 	<div class="flex flex-col mx-auto px-4 sm:px-6 lg:px-10">
-		<h2 class="text-2xl font-semibold mb-4">Features:</h2>
+		<h3 class="text-2xl font-semibold mb-0">Features:</h3>
 		<!--Mode Options-->
 		<div class="flex flex-col mx-auto gap-y-4 gap-x-8 px-4 sm:px-6 lg:px-8">
 			<!-- Library Mode-->
