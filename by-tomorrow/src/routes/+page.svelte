@@ -1,5 +1,5 @@
 <body class="bg-gray-100 text-gray-800">
-	<div class="container flex flex-col mx-auto px-4 py-4">
+	<div class="container flex flex-col mx-auto px-4 py-4 sm:px-6 lg:px-20">
 		<!--Header-->
 		<div class="flex flex-col mx-auto p-6">
 			<h1 class="text-5xl font-bold mb-4 text-center">By Tomorrow</h1>
@@ -10,10 +10,10 @@
 		</div>
 
 		<!--Descriptions-->
-		<div class="flex flex-col mx-auto px-4">
+		<div class="flex flex-col mx-auto px-4 sm:px-6 lg:px-10">
 			<h2 class="text-2xl font-semibold mb-4">Features:</h2>
 			<!--Mode Options-->
-			<div class="space-y-6">
+			<div class="flex flex-col mx-auto gap-y-4 gap-x-8 px-4 sm:px-6 lg:px-8">
 				<!-- Library Mode-->
 				<div class="grid gird-cols-1 md:grid-cols-3 gap-4 items-center">
 					<button
