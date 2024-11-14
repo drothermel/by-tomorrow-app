@@ -28,6 +28,6 @@ export const actions = {
 			return fail(400, { form })
 		}
 
-		throw redirect(300, '/dashboard')
+		redirect(300, '/dashboard');
 	},
 }

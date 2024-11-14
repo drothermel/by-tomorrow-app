@@ -51,7 +51,7 @@ export async function getPost(slug: string) {
 	})
 
 	if (!post) {
-		throw error(400, `Could not find “${slug}”`)
+		error(400, `Could not find “${slug}”`);
 	}
 
 	return post

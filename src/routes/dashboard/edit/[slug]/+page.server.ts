@@ -9,7 +9,7 @@ export const load = async ({ params }) => {
 	const post = await posts.getPost(params.slug)
 
 	if (!post) {
-		throw error(400, 'Could not find post')
+		error(400, 'Could not find post');
 	}
 
 	const form = await superValidate(post, postSchema)
@@ -34,6 +34,6 @@ export const actions = {
 			return fail(400, { form })
 		}
 
-		throw redirect(300, '/dashboard')
+		redirect(300, '/dashboard');
 	},
 }

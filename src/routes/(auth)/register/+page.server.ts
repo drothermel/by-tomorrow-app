@@ -6,7 +6,7 @@ import { authSchema } from '$lib/zod/schema'
 
 export const load = async ({ locals }) => {
 	const session = await locals.validate()
-	if (session) throw redirect(302, '/')
+	if (session) redirect(302, '/');
 
 	const form = await superValidate(null, authSchema)
 	return { form }
