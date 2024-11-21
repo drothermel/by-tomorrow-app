@@ -2,17 +2,6 @@
 	import { Button } from '$lib/components/ui/button/index'
 </script>
 
-<!--Header -->
-<nav class="bg-gray-800 p-4">
-	<div class="max-w-7xl mx-auto flex space-x-4 sm:space-x-8">
-		<a href="/" class="text-white hover:text-gray-300">Home</a>
-		<a href="/files" class="text-white hover:text-gray-300">File Manager</a>
-		<a href="/library" class="text-white hover:text-gray-300">Library</a>
-		<a href="/preview" class="text-white hover:text-gray-300">Reader</a>
-		<a href="/editor" class="text-white hover:text-gray-300">Editor</a>
-	</div>
-</nav>
-
 <div class="container flex flex-col mx-auto px-4 py-4 sm:px-6 lg:px-20">
 	<!--Header-->
 	<div class="flex flex-col mx-auto p-6">
@@ -29,14 +18,14 @@
 		<div class="flex flex-col mx-auto gap-y-4 gap-x-8 px-4 sm:px-6 lg:px-8">
 			<!-- Library Mode-->
 			<div class="grid gird-cols-1 md:grid-cols-3 gap-4 items-center">
-				<Button>Library</Button>
+				<Button href="/library">Library</Button>
 				<p class="text-m md:col-span-2">
 					<strong>Library Mode</strong>: Sort through your source documents,
 					thought/note snippets, and produced compound documents.
 				</p>
 			</div>
 			<div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-				<Button>Preview</Button>
+				<Button href="/preview">Preview</Button>
 				<p class="text-base md:col-span-2">
 					<strong>Preview Mode</strong>: After selecting a subset of documents
 					to preview in library mode, enter a focused reading mode to explore
@@ -44,7 +33,7 @@
 				</p>
 			</div>
 			<div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-				<Button>Editor</Button>
+				<Button href="/editor">Editor</Button>
 				<p class="text-base md:col-span-2">
 					<strong>Editor Mode</strong>: Combine your source documents, thought
 					snippets, and new ideas with a drag-and-drop doc creation editor.
@@ -58,6 +47,6 @@
 		<h3 class="text-lg mx-auto">
 			Create an account and add some source documents to get started!
 		</h3>
-		<Button>Create Account</Button>
+		<Button href="/login">Create Account</Button>
 	</div>
 </div>
