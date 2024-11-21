@@ -47,6 +47,6 @@
 		<h3 class="text-lg mx-auto">
 			Create an account and add some source documents to get started!
 		</h3>
-		<Button href="/login">Create Account</Button>
+		<Button>Create Account</Button>
 	</div>
 </div>
