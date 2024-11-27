@@ -20,4 +20,13 @@
 			{/each}
 		</Table.Row>
 	</Table.Header>
+	<Table.Body>
+		{#each data as row}
+			<Table.Row>
+				<Table.Cell>{row.name}</Table.Cell>
+				<Table.Cell>{row.age}</Table.Cell>
+				<Table.Cell>{row.city}</Table.Cell>
+			</Table.Row>
+		{/each}
+	</Table.Body>
 </Table.Root>
