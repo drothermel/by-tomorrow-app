@@ -3,14 +3,11 @@
 	import AppSidebar from '$lib/components/app-sidebar.svelte'
 
 	import '../app.css'
-	import { Provider } from '$lib/components/ui/tooltip'
 	let { children } = $props()
 </script>
 
 <Sidebar.Provider>
 	<AppSidebar />
-	<main>
-		<Sidebar.Trigger />
-		{@render children?.()}
-	</main>
+	<Sidebar.Trigger />
+	{@render children?.()}
 </Sidebar.Provider>
