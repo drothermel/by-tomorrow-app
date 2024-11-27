@@ -2,7 +2,7 @@
 	import { Button } from '$lib/components/ui/button/index'
 </script>
 
-<div class="container flex flex-col mx-auto px-4 py-4 sm:px-6 lg:px-20">
+<div class="flex flex-col mx-auto px-4 py-4 sm:px-6 lg:px-20">
 	<!--Header-->
 	<div class="flex flex-col mx-auto p-6">
 		<h1 class="text-center">By Tomorrow</h1>
