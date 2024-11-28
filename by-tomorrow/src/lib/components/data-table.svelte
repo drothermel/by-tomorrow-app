@@ -23,6 +23,20 @@
 		}
 		selectedRows = new Set(selectedRows) // Trigger reactivity
 	}
+
+	function isAllSelected(): boolean {
+		return selectedRows.size === data.length
+	}
+
+	function toggleAllSelection(): void {
+		if (isAllSelected()) {
+			selectedRows.clear()
+		} else {
+			data.forEach((row) => selectedRows.add(row.id))
+		}
+		selectedRows = new Set(selectedRows) // Trigger reactivity
+	}
+
 	$effect(() => {
 		console.log(selectedRows)
 	})
@@ -30,12 +44,12 @@
 
 <Table.Root>
 	<Table.Header>
-		<Table.Row>
+		<Table.Row class="bg-slate-50">
 			<Table.Head>
 				<Checkbox
-					checked={false}
-					onchange={() => {
-						console.log('clicked check all')
+					checked={isAllSelected()}
+					onCheckedChange={(checked) => {
+						toggleAllSelection()
 					}}
 				/>
 			</Table.Head>
