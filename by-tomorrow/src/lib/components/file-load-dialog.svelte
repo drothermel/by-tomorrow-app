@@ -1,4 +1,5 @@
 <script lang="ts">
+	import LocalFileCard from '$lib/components/load/local-file-card.svelte'
 	import * as Dialog from '$lib/components/ui/dialog/index.js'
 	import { Button, buttonVariants } from '$lib/components/ui/button/index'
 	import FileUp from 'lucide-svelte/icons/file-up'
@@ -11,7 +12,7 @@
 	<Dialog.Content>
 		<Dialog.Header>
 			<Dialog.Title>Upload File</Dialog.Title>
-			<Dialog.Description>Choose a local file to upload.</Dialog.Description>
+			<LocalFileCard />
 		</Dialog.Header>
 	</Dialog.Content>
 </Dialog.Root>
