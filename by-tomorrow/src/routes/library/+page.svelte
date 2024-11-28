@@ -3,8 +3,10 @@
 	import Label from '$lib/components/ui/label/label.svelte'
 </script>
 
-<div class="hidden h-full flex-1 flex-col px-4 md:flex">
-	<div class="flex flex-col items-center justify-between space-y-2 gap-4">
+<div class="flex h-full flex-1 flex-col items-center px-4">
+	<div
+		class="flex flex-col w-full sm:w-5/6 md:w-4/5 lg:w-3/4 xl:3/5 justify-between space-y-2 gap-4"
+	>
 		<div>
 			<h2 class="text-2xl font-bold tracking-tight text-balance">
 				Source Library
