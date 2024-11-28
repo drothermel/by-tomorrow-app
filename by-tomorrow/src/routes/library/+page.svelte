@@ -12,11 +12,13 @@
 			<h2 class="text-2xl font-bold tracking-tight text-balance">
 				Source Library
 			</h2>
-			<p class="text-muted-foreground">
-				Upload and explore source documents (eg. pdfs, blogposts). Then select
-				some to annotate in the reader.
-			</p>
-			<FileLoadDialog />
+			<div class="flex flex-row justify-between gap-4">
+				<p class="text-muted-foreground">
+					Upload and explore source documents (eg. pdfs, blogposts). Then select
+					some to annotate in the reader.
+				</p>
+				<FileLoadDialog />
+			</div>
 		</div>
 		<DataTable />
 	</div>
