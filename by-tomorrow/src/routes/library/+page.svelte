@@ -1,6 +1,7 @@
 <script lang="ts">
 	import DataTable from '$lib/components/data-table.svelte'
 	import Label from '$lib/components/ui/label/label.svelte'
+	import FileLoadDialog from '$lib/components/file-load-dialog.svelte'
 </script>
 
 <div class="flex h-full flex-1 flex-col items-center px-4">
@@ -15,6 +16,7 @@
 				Upload and explore source documents (eg. pdfs, blogposts). Then select
 				some to annotate in the reader.
 			</p>
+			<FileLoadDialog />
 		</div>
 		<DataTable />
 	</div>
