@@ -3,6 +3,10 @@
 	import * as Dialog from '$lib/components/ui/dialog/index.js'
 	import { Button, buttonVariants } from '$lib/components/ui/button/index'
 	import FileUp from 'lucide-svelte/icons/file-up'
+
+	function handleUpload() {
+		console.log('Upload file!')
+	}
 </script>
 
 <Dialog.Root>
@@ -12,7 +16,7 @@
 	<Dialog.Content>
 		<Dialog.Header>
 			<Dialog.Title>Upload File</Dialog.Title>
-			<LocalFileCard />
+			<LocalFileCard {handleUpload} />
 		</Dialog.Header>
 	</Dialog.Content>
 </Dialog.Root>
