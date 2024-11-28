@@ -2,7 +2,7 @@
 	import { Button } from '$lib/components/ui/button/index'
 </script>
 
-<div class="container flex flex-col mx-auto px-4 py-4 sm:px-6 lg:px-20">
+<div class="flex flex-col mx-auto px-4 py-4 sm:px-6 lg:px-20">
 	<!--Header-->
 	<div class="flex flex-col mx-auto p-6">
 		<h1 class="text-center">By Tomorrow</h1>
@@ -25,11 +25,11 @@
 				</p>
 			</div>
 			<div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-				<Button href="/preview">Preview</Button>
+				<Button href="/reader">Reader</Button>
 				<p class="text-base md:col-span-2">
-					<strong>Preview Mode</strong>: After selecting a subset of documents
-					to preview in library mode, enter a focused reading mode to explore
-					the documents and add per-document annotations.
+					<strong>Reader Mode</strong>: After selecting a subset of documents to
+					preview in library mode, enter a focused reading mode to explore the
+					documents and add per-document annotations.
 				</p>
 			</div>
 			<div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
