@@ -20,18 +20,13 @@
 			icon: House,
 		},
 		{
-			title: 'File Manager',
-			url: '/files',
-			icon: CloudUpload,
-		},
-		{
 			title: 'Library',
 			url: '/library',
 			icon: Library,
 		},
 		{
-			title: 'Preview',
-			url: '/preview',
+			title: 'Reader',
+			url: '/reader',
 			icon: SquareChartGantt,
 		},
 		{

@@ -25,11 +25,11 @@
 				</p>
 			</div>
 			<div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-				<Button href="/preview">Preview</Button>
+				<Button href="/reader">Reader</Button>
 				<p class="text-base md:col-span-2">
-					<strong>Preview Mode</strong>: After selecting a subset of documents
-					to preview in library mode, enter a focused reading mode to explore
-					the documents and add per-document annotations.
+					<strong>Reader Mode</strong>: After selecting a subset of documents to
+					preview in library mode, enter a focused reading mode to explore the
+					documents and add per-document annotations.
 				</p>
 			</div>
 			<div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
