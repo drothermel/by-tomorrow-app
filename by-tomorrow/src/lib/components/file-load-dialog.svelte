@@ -8,11 +8,28 @@
 	class FileLoadDialogProps {
 		input?: HTMLInputElement = $state()
 		selected: File | null = $state(null)
+		pdfContent = $state(null)
+
+		readPdf(file) {
+			const reader = new FileReader()
+			reader.onload = (event) => {
+				this.pdfContent = event.target.result // Data URL
+			}
+			reader.readAsDataURL(file)
+		}
 
 		handle_input_change(event: Event) {
 			console.log('File change!')
 			const input = event.target as HTMLInputElement
 			if (input.files && input.files.length > 0) {
+				const file = input.files[0]
+				if (file.type === 'application/pdf') {
+					this.selected = file
+					this.readPdf(file)
+				} else {
+					alert('Please select a valid PDF file')
+				}
+
 				this.selected = input.files[0]
 			}
 			console.log(this.selected)
@@ -25,6 +42,20 @@
 
 		handle_upload(): void {
 			console.log('File uploaded!')
+		}
+
+		// Save the PDF (creates a downloadable link)
+		handleSavePdf() {
+			if (this.selected) {
+				const blob = new Blob([this.selected], { type: 'application/pdf' })
+				const link = document.createElement('a')
+				link.href = URL.createObjectURL(blob)
+				link.download = this.selected.name
+				link.click()
+				URL.revokeObjectURL(link.href)
+			} else {
+				alert('No file selected to save.')
+			}
 		}
 	}
 
@@ -77,6 +108,27 @@
 									>
 								</p>
 							</div>
+
+							<!-- Save PDF Button -->
+							<!-- <button
+								class="px-4 py-2 border border-gray-400 rounded hover:bg-gray-100"
+								onclick={() => file_uploader.handleSavePdf()}
+								disabled={!file_uploader.selected}
+							>
+								Save PDF
+							</button> -->
+
+							<!-- Display PDF (if available) -->
+							{#if file_uploader.pdfContent}
+								<div class="border border-gray-300 rounded overflow-hidden">
+									<span>Content URL: {file_uploader.pdfContent}</span>
+									<iframe
+										class="w-full h-96"
+										src={file_uploader.pdfContent}
+										title="PDF Preview"
+									></iframe>
+								</div>
+							{/if}
 						</Card.Content>
 						<Card.Footer>
 							<Button onclick={file_uploader.handle_upload}>Upload</Button>
