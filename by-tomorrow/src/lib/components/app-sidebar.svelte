@@ -1,9 +1,5 @@
 <script>
-	import House from 'lucide-svelte/icons/house'
-	import CloudUpload from 'lucide-svelte/icons/cloud-upload'
-	import Library from 'lucide-svelte/icons/library'
-	import SquareChartGantt from 'lucide-svelte/icons/square-chart-gantt'
-	import PencilRuler from 'lucide-svelte/icons/pencil-ruler'
+	import { House, Search, Library, SquareChartGantt, PencilRuler, CloudUpload } from 'lucide-svelte';
 
 	import * as Sidebar from '$lib/components/ui/sidebar/index'
 	// import * as Avatar from '$lib/components/ui/avatar/index'
@@ -18,6 +14,11 @@
 			title: 'Home',
 			url: '/',
 			icon: House,
+		},
+		{
+			title: 'Search',
+			url: '/search',
+			icon: Search,
 		},
 		{
 			title: 'Library',
