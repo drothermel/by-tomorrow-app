@@ -9,7 +9,10 @@ export default class ArxivHandler {
         maxResults: 2,
         sortBy: 'lastUpdatedDate',
         sortOrder: 'descending',
-        author: "Kyunghyun Cho",
+        author: 'Kyunghyun Cho',
+        title: "",
+        ids: "",
+        joinType: "AND",
     });
     history = $state([]);
     resultFeed: object[] = $state([]);
@@ -25,23 +28,31 @@ export default class ArxivHandler {
             throw new Error('HTTP error, status = ' + response.status);
         }
         const textResponse = await response.text();
-        this.convertResponseToJson(textResponse);
+        try {
+            this.convertResponseToJson(textResponse);
+        } catch (e) {
+            console.error(e);
+            this.resultFeed = [];
+        }
     }
 
     buildQuery(params) {
         let query = this.queryBase;
         if (params.ids) {
-            query += 'id_list=' + params.ids.join(',') + '&';
+            // query += 'id_list=' + params.ids.join(',') + '&';
+            query += 'id_list=' + params.ids + '&'; // TODO: handle id lists better
         } else {
             query += 'search_query=';
-            if (params.title) query += 'ti:' + params.title + '&';
-            if (params.author) query += 'au:"' + params.author + '"&';
-            if (params.abstract) query += 'abs:' + params.abstract + '&';
-            if (params.comment) query += 'co:' + params.comment + '&';
-            if (params.journal) query += 'jr:' + params.journal + '&';
-            if (params.category) query += 'cat:' + params.category + '&';
-            if (params.reportNumber) query += 'rn:' + params.reportNumber + '&';
-            if (params.all) query += 'all:' + params.all + '&';
+            let queryParams = []
+            if (params.title) queryParams.push('ti:"' + params.title + '"');
+            if (params.author) queryParams.push('au:"' + params.author + '"');
+            if (params.abstract) queryParams.push('abs:' + params.abstract);
+            if (params.comment) queryParams.push('co:' + params.comment);
+            if (params.journal) queryParams.push('jr:' + params.journal);
+            if (params.category) queryParams.push('cat:' + params.category);
+            if (params.reportNumber) queryParams.push('rn:' + params.reportNumber);
+            if (params.all) queryParams.push('all:' + params.all);
+            query += queryParams.join('+' + params.joinType + "+") + '&';
         }
         if (params.start) query += 'start=' + params.start + '&';
         if (params.maxResults) query += 'max_results=' + params.maxResults + '&';
@@ -49,6 +60,7 @@ export default class ArxivHandler {
         if (params.sortOrder) query += 'sortOrder=' + params.sortOrder + '&';
         if (params.submittedDate) query += 'submittedDate=' + params.submittedDate + '&';
         query = query.slice(0, -1); // remove trailing '&'
+        console.log(query)
         return query;
     }
 
@@ -62,7 +74,12 @@ export default class ArxivHandler {
         );
         const result = JSON.parse(jsonString);
         const entries = result['feed']['entry'];
-        this.resultFeed = entries.map((e) => {return this.parseArxivFeedEntry(e)});
+        // TODO: Handle this type of issue with zod not manually
+        if (Array.isArray(entries)) {
+            this.resultFeed = entries.map((e) => {return this.parseArxivFeedEntry(e)});
+        } else {
+            this.resultFeed = [this.parseArxivFeedEntry(entries)];
+        }
         console.log($state.snapshot(this.resultFeed));
     }
 

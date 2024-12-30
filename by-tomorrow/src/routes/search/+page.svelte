@@ -19,30 +19,46 @@
 			</h2>
 			<div class="flex flex-row justify-between gap-4">
 				<p class="text-muted-foreground">
-                    Query the Arxiv API to find interesting papers.
+                    Query the Arxiv API to find interesting papers. Query fields are exact-match only.
 				</p>
 			</div>
 		</div>
         <div class="flex flex-col gap-4">
-            <div class="flex flex-row gap-4">
+            <div class="grid grid-cols-2 gap-2">
               <Label for="maxRes">Max Results:</Label>
               <Input
                 id="maxRes"
                 type="number"
                 bind:value={handler.currQuery.maxResults}
               />
+                <Label for="query_author">Author</Label>
+                <Input
+                    id="query_author"
+                    type="text"
+                    bind:value={handler.currQuery.author}
+                    placeholder="Author Name"
+                    />
+                <Label for="query_title">Title</Label>
+                <Input
+                    id="query_title"
+                    type="text"
+                    bind:value={handler.currQuery.title}
+                    placeholder="Title"
+                    />
+                <Label for="query_id">Article IDs</Label>
+                <Input
+                    id="query_id"
+                    type="text"
+                    bind:value={handler.currQuery.ids}
+                    placeholder="Article ID"
+                    />
+
             </div>
-            <Label for="query_author">Query Arxiv for Author Papers:</Label>
-            <Input
-              id="query_author"
-              type="text"
-              bind:value={handler.currQuery.author}
-              placeholder="Author Name"
-            />
             <Button onclick={() => handler.queryArxiv()}>
-              Query Arxiv API
+                Query Arxiv API
             </Button>
-        
+
+
             <Label for="results">Retrieved Arxiv Results:</Label>
             <div id="results">
               {#if handler.resultFeed.length > 0}
