@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@zerodevx/svelte-json-view':
+        specifier: ^1.0.11
+        version: 1.0.11(svelte@5.1.16)
       drizzle-orm:
         specifier: ^0.33.0
         version: 0.33.0(postgres@3.4.5)
@@ -684,6 +687,11 @@ packages:
 
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
+
+  '@zerodevx/svelte-json-view@1.0.11':
+    resolution: {integrity: sha512-mIjj0H1al/P4FPlbeDoiey93lNEUqBEAe5LIdD5GttZfEYt3awexD2lHwKNfUeY4jHizOJkoWTPN/2iO0GBqpw==}
+    peerDependencies:
+      svelte: ^3.57.0 || ^4.0.0 || ^5.0.0
 
   acorn-typescript@1.4.13:
     resolution: {integrity: sha512-xsc9Xv0xlVfwp2o7sQ+GCQ1PgbkdcpWdTzrwXxO3xDMTAywVS3oXVOcOHuRjAPkS4P9b+yc/qNF15460v+jp4Q==}
@@ -1879,6 +1887,10 @@ snapshots:
   '@types/cookie@0.6.0': {}
 
   '@types/estree@1.0.6': {}
+
+  '@zerodevx/svelte-json-view@1.0.11(svelte@5.1.16)':
+    dependencies:
+      svelte: 5.1.16
 
   acorn-typescript@1.4.13(acorn@8.14.0):
     dependencies:
