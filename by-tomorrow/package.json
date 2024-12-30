@@ -35,6 +35,7 @@
 	"dependencies": {
 		"drizzle-orm": "^0.33.0",
 		"postgres": "^3.4.4",
-		"svelte-radix": "^2.0.1"
+		"svelte-radix": "^2.0.1",
+		"xml-js": "^1.6.11"
 	}
 }
