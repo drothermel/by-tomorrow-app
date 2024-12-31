@@ -1,12 +1,26 @@
 <script lang="ts">
-    import ArxivHandler from "$lib/components/arxiv.svelte";
+    import type { ArxivQuery, ArxivMetadata } from "$lib/schemas"
+    import  { queryArxiv } from "$lib/components/arxiv.svelte";
     import { JsonView } from "@zerodevx/svelte-json-view";
 
     import { Button } from "$lib/components/ui/button/index";
     import { Input } from "$lib/components/ui/input/index";
     import { Label } from "$lib/components/ui/label/index.js";
-
-    let handler = $state(new ArxivHandler());
+    let query: ArxivQuery = $state({
+        start: 0,
+        maxResults: 2,
+        sortBy: 'lastUpdatedDate',
+        sortOrder: 'descending',
+        author: 'Kyunghyun Cho',
+        title: "",
+        ids: "",
+        joinType: "AND",
+    });
+    let history: ArxivQuery[] = $state([]);
+    let resultFeed: ArxivMetadata = $state([]);
+    function updateResultFeed(data: ArxivMetadata) {
+        resultFeed = data;
+    }
 </script>
 
 <div class="flex h-full flex-1 flex-col items-center px-4">
@@ -29,41 +43,41 @@
               <Input
                 id="maxRes"
                 type="number"
-                bind:value={handler.currQuery.maxResults}
+                bind:value={query.maxResults}
               />
                 <Label for="query_author">Author</Label>
                 <Input
                     id="query_author"
                     type="text"
-                    bind:value={handler.currQuery.author}
+                    bind:value={query.author}
                     placeholder="Author Name"
                     />
                 <Label for="query_title">Title</Label>
                 <Input
                     id="query_title"
                     type="text"
-                    bind:value={handler.currQuery.title}
+                    bind:value={query.title}
                     placeholder="Title"
                     />
                 <Label for="query_id">Article IDs</Label>
                 <Input
                     id="query_id"
                     type="text"
-                    bind:value={handler.currQuery.ids}
+                    bind:value={query.ids}
                     placeholder="Article ID"
                     />
 
             </div>
-            <Button onclick={() => handler.queryArxiv()}>
+            <Button onclick={() => queryArxiv(query, updateResultFeed)}>
                 Query Arxiv API
             </Button>
 
 
             <Label for="results">Retrieved Arxiv Results:</Label>
             <div id="results">
-              {#if handler.resultFeed.length > 0}
+              {#if resultFeed.length > 0}
                 <div class="flex flex-col gap-4 w-full prose-sm p-4 bg-slate-50">
-                  {#each handler.resultFeed as entry}
+                  {#each resultFeed as entry}
                     <div class="flex flex-col p-4 gap-2 bg-slate-100">
                       <JsonView json={entry} />
                     </div>
