@@ -1,26 +1,16 @@
 <script lang="ts">
-    import type { ArxivQuery, ArxivMetadata } from "$lib/schemas"
-    import  { queryArxiv } from "$lib/components/arxiv.svelte";
-    import { JsonView } from "@zerodevx/svelte-json-view";
+  import type { ActionData} from "./types.ts";
+  import type { ArxivQuery, ArxivMetadata } from "$lib/schemas"
+  import { enhance } from '$app/forms';
+  import { JsonView } from "@zerodevx/svelte-json-view";
 
-    import { Button } from "$lib/components/ui/button/index";
-    import { Input } from "$lib/components/ui/input/index";
-    import { Label } from "$lib/components/ui/label/index.js";
-    let query: ArxivQuery = $state({
-        start: 0,
-        maxResults: 2,
-        sortBy: 'lastUpdatedDate',
-        sortOrder: 'descending',
-        author: 'Kyunghyun Cho',
-        title: "",
-        ids: "",
-        joinType: "AND",
-    });
-    let history: ArxivQuery[] = $state([]);
-    let resultFeed: ArxivMetadata = $state([]);
-    function updateResultFeed(data: ArxivMetadata) {
-        resultFeed = data;
-    }
+  import { Button } from "$lib/components/ui/button/index";
+  import { Input } from "$lib/components/ui/input/index";
+  import { Label } from "$lib/components/ui/label/index.js";
+
+  let { form } : { form: ActionData} = $props();
+  let resultFeed = $derived(form?.data ?? []);
+  let history: ArxivQuery[] = $state([]);
 </script>
 
 <div class="flex h-full flex-1 flex-col items-center px-4">
@@ -38,39 +28,57 @@
 			</div>
 		</div>
         <div class="flex flex-col gap-4">
-            <div class="grid grid-cols-2 gap-2">
-              <Label for="maxRes">Max Results:</Label>
-              <Input
-                id="maxRes"
-                type="number"
-                bind:value={query.maxResults}
-              />
-                <Label for="query_author">Author</Label>
+          <div class="w-full sm:w-5/6 xl:w-2/3 justify-center mx-auto">
+            <form method="POST">
+              <div class="grid grid-cols-2 gap-2 p-4">
+                  <Label for="queryAuthor">Author</Label>
+                  <Input
+                      id="queryAuthor"
+                      name="queryAuthor"
+                      type="text"
+                      value={form?.query?.author ?? "Kyunghyun Cho"}
+                      />
+                  <Label for="queryTitle">Title</Label>
+                  <Input
+                      id="queryTitle"
+                      name="queryTitle"
+                      type="text"
+                      value={form?.query?.title ?? ""}
+                      />
+                  <Label for="queryId">Article IDs</Label>
+                  <Input
+                      id="queryId"
+                      name="queryId"
+                      type="text"
+                      value={form?.query?.ids ?? ""}
+                      />
+              </div>
+              <div class="flex flex-row gap-2 p-4 justify-center mx-auto">
+                <Label>Max Results:
                 <Input
-                    id="query_author"
+                  id="maxResults"
+                  name="maxResults"
+                  type="number"
+                  value={form?.query?.maxResults ?? 2}
+                />
+                </Label>
+                <Label>
+                  Sort By:
+                  <Input
+                    id="sortBy"
+                    name="sortBy"
                     type="text"
-                    bind:value={query.author}
-                    placeholder="Author Name"
+                    value={form?.query?.sortBy ?? "lastUpdatedDate"}
                     />
-                <Label for="query_title">Title</Label>
-                <Input
-                    id="query_title"
-                    type="text"
-                    bind:value={query.title}
-                    placeholder="Title"
-                    />
-                <Label for="query_id">Article IDs</Label>
-                <Input
-                    id="query_id"
-                    type="text"
-                    bind:value={query.ids}
-                    placeholder="Article ID"
-                    />
+                </Label>
 
-            </div>
-            <Button onclick={() => queryArxiv(query, updateResultFeed)}>
-                Query Arxiv API
-            </Button>
+              </div>
+              <Button type="submit">
+                  Query Arxiv API
+              </Button>
+            </form>
+
+          </div>
 
 
             <Label for="results">Retrieved Arxiv Results:</Label>

@@ -5,7 +5,7 @@ import { arxivResponseSchema } from "$lib/schemas";
 
 export const QUERY_BASE: string = 'https://export.arxiv.org/api/query?';
 
-export async function queryArxiv(query: ArxivQuery, callback: (data: ArxivMetadata) => void) {
+export async function queryArxiv(query: ArxivQuery): Promise<ArxivMetadata> {
         let queryStr: string = buildQuery(query);
         const response = await fetch(queryStr);
         if (!response.ok) {
@@ -21,9 +21,8 @@ export async function queryArxiv(query: ArxivQuery, callback: (data: ArxivMetada
         const jsonData = JSON.parse(jsonString);
 
         // Validate the JSON response
-        let data = [] as ArxivMetadata;
         try {
-            data = validateSchema({
+            return validateSchema({
                 dto: jsonData,
                 schema: arxivResponseSchema,
                 schemaName: "arxivResponseSchema",
@@ -32,7 +31,7 @@ export async function queryArxiv(query: ArxivQuery, callback: (data: ArxivMetada
             // Handle validation or parsing errors
             console.error('Error parsing and validating response:', error);
         }
-        callback(data);
+        return [] as ArxivMetadata;
 }
 
 export function buildQuery(params: ArxivQuery): string {

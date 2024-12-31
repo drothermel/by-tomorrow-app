@@ -40,6 +40,7 @@ export const arxivQuerySchema = z.object({
     joinType: arxivQueryJoinTypeEnum.optional().default("AND"),
 });
 export type ArxivQuery = z.infer<typeof arxivQuerySchema>;
+export type SortByType = z.infer<typeof arxivSortByEnum>;
 
 /** Arxiv Response Schemas */
 export const arxivAuthorFieldSchema = z.object({
