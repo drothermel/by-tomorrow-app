@@ -4,10 +4,7 @@ import type { ActionData } from "./types";
 
 export const actions = {
     default: async ({ request }): Promise<ActionData> => {
-        console.log("HITTING THE FORM");
         const formData = await request.formData();
-        console.log("formData", formData);
-
         let query: ArxivQuery = {
             start: 0,
             maxResults: Number(formData.get('maxResults')) ?? 2,

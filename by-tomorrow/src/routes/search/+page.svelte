@@ -4,11 +4,23 @@
   import { enhance } from '$app/forms';
   import { JsonView } from "@zerodevx/svelte-json-view";
 
+  import * as Select from "$lib/components/ui/select/index.js";
   import { Button } from "$lib/components/ui/button/index";
   import { Input } from "$lib/components/ui/input/index";
   import { Label } from "$lib/components/ui/label/index.js";
 
   let { form } : { form: ActionData} = $props();
+  const sortByOpts = [
+    { value: "relevance", label: "Relevance" },
+    { value: "lastUpdatedDate", label: "Last Updated" },
+    { value: "submittedDate", label: "Submitted Date" },
+  ]
+  let sortBySelected = $state(form?.query?.sortBy ?? "");
+  let sortByText = $derived(
+    sortByOpts.find((f) => f.value === sortBySelected)?.label ?? "Select an order"
+  );
+
+
   let resultFeed = $derived(form?.data ?? []);
   let history: ArxivQuery[] = $state([]);
 </script>
@@ -29,7 +41,7 @@
 		</div>
         <div class="flex flex-col gap-4">
           <div class="w-full sm:w-5/6 xl:w-2/3 justify-center mx-auto">
-            <form method="POST">
+            <form method="POST" use:enhance={() => ({ update }) => update({ reset: false })}>
               <div class="grid grid-cols-2 gap-2 p-4">
                   <Label for="queryAuthor">Author</Label>
                   <Input
@@ -64,14 +76,15 @@
                 </Label>
                 <Label>
                   Sort By:
-                  <Input
-                    id="sortBy"
-                    name="sortBy"
-                    type="text"
-                    value={form?.query?.sortBy ?? "lastUpdatedDate"}
-                    />
+                <Select.Root type="single" name="sortBy" bind:value={sortBySelected}>
+                  <Select.Trigger class="w-[180px]">{sortByText}</Select.Trigger>
+                  <Select.Content>
+                    <Select.Item value="relevance">Relevance</Select.Item>
+                    <Select.Item value="lastUpdatedDate">Last Updated</Select.Item>
+                    <Select.Item value="submittedDate">Submitted Date</Select.Item>
+                  </Select.Content>
+                </Select.Root>
                 </Label>
-
               </div>
               <Button type="submit">
                   Query Arxiv API
