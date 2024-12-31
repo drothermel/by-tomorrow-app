@@ -1,7 +1,7 @@
-import { z } from 'zod';
 import convert from "xml-js";
+import { validateSchema } from '$lib/utils';
 import type { ArxivQuery, ArxivMetadata} from "$lib/schemas";
-import { arxivResponseSchema, arxivEntrySchema } from "$lib/schemas";
+import { arxivResponseSchema } from "$lib/schemas";
 
 export default class ArxivHandler {
 
@@ -41,13 +41,16 @@ export default class ArxivHandler {
 
         // Validate the JSON response
         try {
-            this.resultFeed = arxivResponseSchema.parse(jsonData);
+            this.resultFeed = validateSchema({
+                dto: jsonData,
+                schema: arxivResponseSchema,
+                schemaName: "arxivResponseSchema",
+            });
         } catch (error) {
             // Handle validation or parsing errors
             console.error('Error parsing and validating response:', error);
             this.resultFeed = [];
         }
-        console.log($state.snapshot(this.resultFeed));
     }
 
     buildQuery(params: ArxivQuery) {
@@ -72,11 +75,7 @@ export default class ArxivHandler {
         if (params.sortBy) query += 'sortBy=' + params.sortBy + '&';
         if (params.sortOrder) query += 'sortOrder=' + params.sortOrder + '&';
         query = query.slice(0, -1); // remove trailing '&'
-        console.log(query)
         return query;
-    }
-
-    parseResponseString(response: string) {
     }
 
     authorsToString(authors: string[], query: ArxivQuery): string {

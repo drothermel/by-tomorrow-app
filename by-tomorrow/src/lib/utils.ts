@@ -10,11 +10,11 @@ interface ValidateConfig<T extends z.ZodTypeAny> {
 	dto: unknown;
 	schema: T;
 	schemaName: string;
-  }
+}
   
-  export function validateSchema<T extends z.ZodTypeAny>(
+export function validateSchema<T extends z.ZodTypeAny>(
 	config: ValidateConfig<T>
-  ): z.infer<T> {
+): z.infer<T> {
 	const { data, success, error } = config.schema.safeParse(config.dto);
   
 	if (success) {
@@ -28,8 +28,8 @@ interface ValidateConfig<T extends z.ZodTypeAny> {
   
 	  throw error;
 	}
-  }
+}
   
-  function captureError(message: string, extra = {}): void {
+function captureError(message: string, extra = {}): void {
 	console.error(message, extra);
-  }
+}
