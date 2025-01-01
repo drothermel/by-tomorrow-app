@@ -1,11 +1,11 @@
 import convert from "xml-js";
 import { validateSchema } from '$lib/utils';
-import type { ArxivQuery, ArxivMetadata} from "$lib/schemas";
+import type { ArxivQuery, ArxivMetadataList} from "$lib/schemas";
 import { arxivResponseSchema } from "$lib/schemas";
 
 export const QUERY_BASE: string = 'https://export.arxiv.org/api/query?';
 
-export async function queryArxiv(query: ArxivQuery): Promise<ArxivMetadata> {
+export async function queryArxiv(query: ArxivQuery): Promise<ArxivMetadataList> {
         let queryStr: string = buildQuery(query);
         const response = await fetch(queryStr);
         if (!response.ok) {
@@ -31,7 +31,7 @@ export async function queryArxiv(query: ArxivQuery): Promise<ArxivMetadata> {
             // Handle validation or parsing errors
             console.error('Error parsing and validating response:', error);
         }
-        return [] as ArxivMetadata;
+        return [] as ArxivMetadataList;
 }
 
 export function buildQuery(params: ArxivQuery): string {

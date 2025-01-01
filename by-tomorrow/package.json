@@ -14,6 +14,8 @@
 		"db:studio": "drizzle-kit studio"
 	},
 	"devDependencies": {
+		"@melt-ui/pp": "^0.3.2",
+		"@melt-ui/svelte": "^0.86.2",
 		"@sveltejs/adapter-auto": "^3.3.1",
 		"@sveltejs/kit": "^2.15.1",
 		"@sveltejs/vite-plugin-svelte": "^4.0.4",
@@ -34,7 +36,9 @@
 	"dependencies": {
 		"@zerodevx/svelte-json-view": "^1.0.11",
 		"postgres": "^3.4.5",
+		"prettier-plugin-svelte": "^3.3.2",
 		"svelte-radix": "^2.0.1",
+		"title-case": "^4.3.2",
 		"xml-js": "^1.6.11",
 		"zod": "^3.24.1"
 	}
