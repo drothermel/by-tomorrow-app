@@ -105,6 +105,22 @@ export const arxivEntrySchema = z.object({
     const result = {...rest, primaryCategory, comment, "links": link_obj};
     return filterUndefined(result);
 });
+export const arxivMetadataSchema = z.object({
+    id: z.string(),
+    updated: z.string(),
+    published: z.string(),
+    title: z.string(),
+    summary: z.string(),
+    author: z.array(z.string()),
+    links: z.object({
+        absLink: z.string().optional(),
+        pdfLink: z.string().optional(),
+        doiLink: z.string().optional(),
+    }),
+    category: z.array(z.string()),
+    primaryCategory: z.string(),
+    comment: z.string().optional(),
+})
 
 export const arxivEntriesSchema = z.union([
     arxivEntrySchema,

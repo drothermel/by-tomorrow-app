@@ -12,15 +12,22 @@
 	import type { ArxivMetadataList, ArxivQuery } from './../schemas.ts'
 	import PaperCard from '$lib/components/cards/paperCard.svelte'
 	import Button from './ui/button/button.svelte'
-	let { data, query }: { data: ArxivMetadataList; query: ArxivQuery } = $props()
+	let {
+		data,
+		query,
+		libraryInit,
+	}: {
+		data: ArxivMetadataList
+		query: ArxivQuery
+		libraryInit: string[]
+	} = $props()
 
 	// This is a subset of return values
 	const {
 		elements: { root, input, tag, deleteTrigger, edit },
 		states: { tags },
 	} = createTagsInput()
-	let library: SvelteSet<string> = $state(new SvelteSet())
-
+	let library: SvelteSet<string> = $state(new SvelteSet(libraryInit))
 	let selected: SvelteSet<string> = $state(new SvelteSet())
 	function toggleSelected(elemId: string): void {
 		if (selected.has(elemId)) {
@@ -34,11 +41,34 @@
 		console.log(`Card ${elemId} clicked!`, event)
 		toggleSelected(elemId)
 	}
-	function saveToLibrary() {
+	async function saveToLibrary() {
 		console.log('Save Selected to Library:', selected)
 		console.log('   used tags:', $tags)
-		library = new SvelteSet([...library, ...selected])
-		selected.clear()
+
+		// Get the data associated with the selected elements
+		let selectedData = data.filter((m) => selected.has(m.id))
+		console.log(selectedData)
+
+		// Make the form data request
+		const formData = new FormData()
+		formData.append('data', JSON.stringify(selectedData))
+
+		const response = await fetch('/search?/addToLibrary', {
+			method: 'POST',
+			body: formData,
+		})
+
+		const result = await response.json()
+		const resultJson = JSON.parse(result.data)
+		console.log('Result:', resultJson)
+		if (resultJson[0].success) {
+			console.log('Metadata added successfully!')
+			// Update the local state to match
+			library = new SvelteSet([...library, ...selected])
+			selected.clear()
+		} else {
+			console.error('Error:', result.error)
+		}
 	}
 </script>
 
@@ -48,17 +78,14 @@
 			Retrieved Results
 		</h3>
 		<Dialog.Root>
-			<Dialog.Trigger>
-				<Button
-					class={{
-						'font-semibold text-md tracking-normal': true,
-						'bg-indigo-400 hover:bg-indigo-800': selected.size > 0,
-						'pointer-events-none bg-slate-400': selected.size === 0,
-					}}
-					size="sm"
-				>
-					Save Selected to Library
-				</Button>
+			<Dialog.Trigger
+				class={{
+					'rounded-sm py-1 px-2 font-semibold text-md tracking-normal': true,
+					'bg-indigo-400 hover:bg-indigo-800': selected.size > 0,
+					'pointer-events-none bg-slate-400': selected.size === 0,
+				}}
+			>
+				Save Selected to Library
 			</Dialog.Trigger>
 			<Dialog.Content>
 				<Dialog.Header>
