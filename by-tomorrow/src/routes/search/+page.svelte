@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores'
 	import type { ActionData } from './types.ts'
 	import type { ArxivQuery, ArxivMetadataList } from '$lib/schemas'
 	import { enhance } from '$app/forms'
@@ -11,7 +12,8 @@
 
 	import CardLibrary from '$lib/components/cardLibrary.svelte'
 
-	let { form }: { form: ActionData } = $props()
+	let { data, form }: { data: any; form: ActionData } = $props()
+	const startIds = $state(data.arxivIds)
 	const sortByOpts = [
 		{ value: 'relevance', label: 'Relevance' },
 		{ value: 'lastUpdatedDate', label: 'Last Updated' },
@@ -48,6 +50,7 @@
 			<!-- Query Form -->
 			<div class="w-full sm:w-5/6 xl:w-2/3 justify-center mx-auto">
 				<form
+					action="?/query"
 					method="POST"
 					use:enhance={() =>
 						({ update }) =>
@@ -112,7 +115,11 @@
 			</div>
 
 			<!-- Card Library -->
-			<CardLibrary data={resultFeed} query={form?.query} />
+			<CardLibrary
+				data={resultFeed}
+				query={form?.query}
+				libraryInit={data.arxivIds}
+			/>
 		</div>
 	</div>
 </div>
