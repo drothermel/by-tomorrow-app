@@ -2,7 +2,6 @@
 	import type { ActionData } from './types.ts'
 	import type { ArxivQuery, ArxivMetadataList } from '$lib/schemas'
 	import { enhance } from '$app/forms'
-	import { JsonView } from '@zerodevx/svelte-json-view'
 
 	import * as Select from '$lib/components/ui/select/index.js'
 	import { Separator } from '$lib/components/ui/separator/index.js'
@@ -26,21 +25,6 @@
 
 	let resultFeed: ArxivMetadataList = $derived(form?.data ?? [])
 	let history: ArxivQuery[] = $state([])
-
-	let data = [
-		{
-			title: 'Paper Title',
-			time: new Date(),
-			tags: ['tag1', 'tag2'],
-			text: 'This is a paper card.',
-		},
-		{
-			title: 'Paper Title 2',
-			time: new Date(),
-			tags: ['tag1', 'tag2'],
-			text: 'This is a paper card 2.',
-		},
-	]
 </script>
 
 <div class="flex h-full flex-1 flex-col items-center px-4">
@@ -128,19 +112,7 @@
 			</div>
 
 			<!-- Card Library -->
-			<div class="flex flex-col gap-4 mb-20">
-				<Label for="cardLib">Retrieved Arxiv Results:</Label>
-				<div id="cardlib" class="mb-5">
-					{#if resultFeed.length > 0}
-						<CardLibrary data={resultFeed} query={form?.query} />
-					{:else}
-						<div class="p-4 prose-sm bg-slate-50">
-							<p>No Results to Show</p>
-						</div>
-					{/if}
-				</div>
-				<Separator />
-			</div>
+			<CardLibrary data={resultFeed} query={form?.query} />
 		</div>
 	</div>
 </div>
