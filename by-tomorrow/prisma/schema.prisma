@@ -9,3 +9,21 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+model PaperMetadataLibrary {
+  id              Int      @id @default(autoincrement())
+  arxivId         String   @unique
+  published       DateTime
+  updated         DateTime
+  title           String
+  abstract        String
+  authors         String
+  absLink         String
+  pdfLink         String
+  categories      String
+  primaryCategory String
+  comments        String?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
