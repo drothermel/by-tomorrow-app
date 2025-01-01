@@ -1,5 +1,6 @@
-import { updated } from "$app/stores";
 import { z } from "zod";
+import { titleCase } from "title-case";
+
 // Use: stringToDateSchema.parse("2021-09-01T00:00:00Z")
 const stringToDateSchema = z.string().transform((val) => new Date(val));
 const normalizeToArray = <T extends z.ZodTypeAny>(schema: T) =>
@@ -23,7 +24,7 @@ export const arxivSortOrderEnum = z.enum(["ascending", "descending"]);
 export const arxivQueryJoinTypeEnum = z.enum(['AND', 'OR', 'ANDNOT']);
 export const arxivQuerySchema = z.object({
     start: z.number().optional().default(0),
-    maxResults: z.number().optional().default(2),
+    maxResults: z.number().optional().default(10),
     sortBy: arxivSortByEnum.optional().default("relevance"),
     sortOrder: arxivSortOrderEnum.optional().default("descending"),
     submittedDateMin: z.date().optional(),
@@ -75,7 +76,7 @@ export const arxivEntrySchema = z.object({
     id: extractTextSchema(),
     updated: extractTextSchema(),
     published: extractTextSchema(),
-    title: extractTextSchema(),
+    title: extractTextSchema().transform((data) => {return titleCase(data)}),
     summary: extractTextSchema(),
     author: normalizeToArray(z.union([
         arxivAuthorFieldSchema,
@@ -94,9 +95,14 @@ export const arxivEntrySchema = z.object({
         ['arxiv:doi']: _, 
         ['arxiv:primary_category']: primaryCategory,
         ['arxiv:comment']: comment,
+        link: _link,
         ...rest 
     } = data;
-    const result = {...rest, primaryCategory, comment};
+    let link_obj = {};
+    for (const l of _link) {
+        link_obj = {...link_obj, ...l};
+    }
+    const result = {...rest, primaryCategory, comment, "links": link_obj};
     return filterUndefined(result);
 });
 
@@ -109,4 +115,5 @@ export const arxivResponseSchema = z.object({
         entry: normalizeToArray(arxivEntriesSchema)
     }),
 }).passthrough().transform((data) => data.feed.entry);
-export type ArxivMetadata = z.infer<typeof arxivResponseSchema>;
+export type ArxivMetadataList = z.infer<typeof arxivResponseSchema>;
+export type ArxivMetadata = z.infer<typeof arxivEntrySchema>;

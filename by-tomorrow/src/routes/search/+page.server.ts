@@ -1,4 +1,4 @@
-import type { ArxivQuery, ArxivMetadata, SortByType } from "$lib/schemas"
+import type { ArxivQuery, ArxivMetadataList, SortByType } from "$lib/schemas"
 import { queryArxiv } from "$lib/components/arxiv.svelte";
 import type { ActionData } from "./types";
 
@@ -7,7 +7,7 @@ export const actions = {
         const formData = await request.formData();
         let query: ArxivQuery = {
             start: 0,
-            maxResults: Number(formData.get('maxResults')) ?? 2,
+            maxResults: Number(formData.get('maxResults')) ?? 10,
             sortBy: (String(formData.get('sortBy')) ?? 'lastUpdatedDate') as SortByType,
             sortOrder: 'descending',
             author: String(formData.get('queryAuthor')) ?? "Kyunghyun Cho",
@@ -15,7 +15,7 @@ export const actions = {
             ids: String(formData.get('queryId')) ?? "",
             joinType: "AND",
         }
-        let data: ArxivMetadata = await queryArxiv(query);
+        let data: ArxivMetadataList = await queryArxiv(query);
 
         return { success: true, query, data }
     },
