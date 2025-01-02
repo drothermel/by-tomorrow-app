@@ -1,9 +1,9 @@
 -- CreateTable
 CREATE TABLE "PaperMetadataLibrary" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "id" SERIAL NOT NULL,
     "arxivId" TEXT NOT NULL,
-    "published" DATETIME NOT NULL,
-    "updated" DATETIME NOT NULL,
+    "published" TIMESTAMP(3) NOT NULL,
+    "updated" TIMESTAMP(3) NOT NULL,
     "title" TEXT NOT NULL,
     "abstract" TEXT NOT NULL,
     "authors" TEXT NOT NULL,
@@ -13,8 +13,10 @@ CREATE TABLE "PaperMetadataLibrary" (
     "primaryCategory" TEXT NOT NULL,
     "comments" TEXT,
     "tags" TEXT,
-    "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" DATETIME NOT NULL
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "PaperMetadataLibrary_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
