@@ -37,7 +37,6 @@
 		"@prisma/client": "^6.1.0",
 		"@zerodevx/svelte-json-view": "^1.0.11",
 		"marked": "^15.0.4",
-		"mupdf": "^1.1.0",
 		"postgres": "^3.4.5",
 		"prettier-plugin-svelte": "^3.3.2",
 		"svelte-radix": "^2.0.1",
