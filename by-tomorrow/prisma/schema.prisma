@@ -23,6 +23,7 @@ model PaperMetadataLibrary {
   categories      String
   primaryCategory String
   comments        String?
+  tags            String?
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
