@@ -14,6 +14,7 @@ export type PaperMetadataInput = {
     categories: string;
     primaryCategory: string;
     comments?: string;
+    tags?: string;
 }
 
 export async function findPaperByArxivId(arxivId: string) {
@@ -43,6 +44,7 @@ export async function addPaperMetadata(input: PaperMetadataInput) {
                 categories: input.categories,
                 primaryCategory: input.primaryCategory,
                 comments: input.comments,
+                tags: input.tags,
             },
             create: {
                 arxivId: input.arxivId,
@@ -56,6 +58,7 @@ export async function addPaperMetadata(input: PaperMetadataInput) {
                 categories: input.categories,
                 primaryCategory: input.primaryCategory,
                 comments: input.comments,
+                tags: input.tags,
             },
         });
         return paper;
@@ -86,6 +89,7 @@ export async function upsertPapersInTransaction(papers: PaperMetadataInput[]) {
               categories: paper.categories,
               primaryCategory: paper.primaryCategory,
               comments: paper.comments,
+              tags: paper.tags,
             },
           });
         } else {
@@ -102,6 +106,7 @@ export async function upsertPapersInTransaction(papers: PaperMetadataInput[]) {
               categories: paper.categories,
               primaryCategory: paper.primaryCategory,
               comments: paper.comments,
+              tags: paper.tags,
             },
           });
         }

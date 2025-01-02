@@ -1,11 +1,9 @@
 <script lang="ts">
-	import { page } from '$app/stores'
 	import type { ActionData } from './types.ts'
 	import type { ArxivQuery, ArxivMetadataList } from '$lib/schemas'
 	import { enhance } from '$app/forms'
 
 	import * as Select from '$lib/components/ui/select/index.js'
-	import { Separator } from '$lib/components/ui/separator/index.js'
 	import { Button } from '$lib/components/ui/button/index'
 	import { Input } from '$lib/components/ui/input/index'
 	import { Label } from '$lib/components/ui/label/index.js'

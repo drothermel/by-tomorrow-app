@@ -52,6 +52,7 @@
 		// Make the form data request
 		const formData = new FormData()
 		formData.append('data', JSON.stringify(selectedData))
+		formData.append('tags', JSON.stringify($tags))
 
 		const response = await fetch('/search?/addToLibrary', {
 			method: 'POST',
