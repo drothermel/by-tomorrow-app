@@ -1,5 +1,6 @@
 <script lang="ts">
 	import * as Table from '$lib/components/ui/table/index'
+	import { Badge } from '$lib/components/ui/badge/index'
 	import { Checkbox } from '$lib/components/ui/checkbox/index'
 
 	interface Props {
@@ -83,8 +84,16 @@
 							}}
 						/>
 					</Table.Cell>
-					{#each row.data as cell}
-						<Table.Cell>{cell}</Table.Cell>
+					{#each row.data as cell, index}
+						{#if index === 0}
+							<Table.Cell class="flex flex-wrap gap-1">
+								{#each JSON.parse(cell) as tag}
+									<Badge variant="secondary">{tag}</Badge>
+								{/each}
+							</Table.Cell>
+						{:else}
+							<Table.Cell>{cell}</Table.Cell>
+						{/if}
 					{/each}
 				</Table.Row>
 			{/each}

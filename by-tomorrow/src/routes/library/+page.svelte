@@ -11,20 +11,20 @@
 		'Authors',
 		'Published',
 		'Updated',
-		'Categories',
 		'Primary Category',
+		'Categories',
 		'Comments',
 		'Link',
 	]
 	let library: string[][] = $state(
 		data.papers.map((paper) => [
-			'',
+			paper.tags ?? '',
 			paper.title,
 			paper.authors,
 			new Date(paper.published).toLocaleDateString(),
 			new Date(paper.updated).toLocaleDateString(),
-			paper.categories,
 			paper.primaryCategory,
+			paper.categories,
 			paper.comments ?? '',
 			paper.absLink,
 		])

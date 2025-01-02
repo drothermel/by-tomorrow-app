@@ -53,6 +53,7 @@ export const actions = {
             // Parse and validate form data
             const formData = await request.formData();
             const rawData = formData.get('data');
+            const rawTags = formData.get('tags');
             if (!rawData) {
               return { success: false, error: 'No data provided.' };
             }
@@ -61,6 +62,17 @@ export const actions = {
             const jsonData = JSON.parse(rawData as string) as unknown[];
             const validatedData = z.array(arxivMetadataSchema).parse(jsonData);
             console.log("After validate data")
+            const jsonTags = JSON.parse(rawTags as string) as unknown;
+            const validatedTags = z.array(
+              z.object({
+                id: z.string(),
+                value: z.string(),
+              })
+            ).transform((data) => data.map((tag) => tag.value)).parse(jsonTags);
+            const tagStr = JSON.stringify(validatedTags);
+            console.log("Tags", jsonTags);
+            console.log("Validated Tags", validatedTags);
+            console.log("Tag str", tagStr);
       
             // Map validated data to match Prisma's PaperMetadataInput
             const metadataList: PaperMetadataInput[] = validatedData.map((entry) => ({
@@ -79,16 +91,10 @@ export const actions = {
                 : entry.category,
               primaryCategory: entry.primaryCategory,
               comments: entry.comment,
+              tags: tagStr,
             }));
       
-            // Insert metadata into the database
-            // await db.paperMetadataLibrary.createMany({
-            //   data: metadataList,
-            // });
             await upsertPapersInTransaction(metadataList);
-      
-            console.log("error inside the action??")
-
             return { success: true };
           } catch (error) {
             console.error('Error adding to library:', error);
