@@ -11,7 +11,8 @@
 		<Label for="pdfurl">PDF Link:</Label>
 		<Input bind:value={pdfUrl} id="pdfurl" placeholder="Enter link to pdf" />
 	</div>
-	<iframe src={pdfUrl} class="pdf-container min-h-screen" />
+	<iframe title="PDFViewer" src={pdfUrl} class="pdf-container min-h-screen"
+	></iframe>
 </div>
 
 <style>
