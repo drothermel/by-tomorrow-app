@@ -41,6 +41,13 @@ export const actions = {
 
         return { success: true, query, data }
     },
+    load: async ({ request }) => {
+      const papers = await db.paperMetadataLibrary.findMany();
+      return {
+        success: true,
+        papers,
+      };
+    },
     addToLibrary: async ({ request }) => {
         try {
             // Parse and validate form data
