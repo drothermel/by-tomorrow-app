@@ -1,9 +1,10 @@
 <script lang="ts">
+	import { invalidateAll } from '$app/navigation'
+
 	import LibraryTable from '$lib/components/libraryTable.svelte'
+	import Button from '$lib/components/ui/button/button.svelte'
 
 	let { data } = $props()
-	console.log(data)
-	console.log(data.papers)
 
 	const headers = [
 		'Tags',
@@ -16,26 +17,55 @@
 		'Comments',
 		'Link',
 	]
-	let library: string[][] = $state(
-		data.papers.map((paper) => [
-			paper.tags ?? '',
-			paper.title,
-			paper.authors,
-			new Date(paper.published).toLocaleDateString(),
-			new Date(paper.updated).toLocaleDateString(),
-			paper.primaryCategory,
-			paper.categories,
-			paper.comments ?? '',
-			paper.absLink,
-		])
-	)
+	let initLibrary: string[][] = data.papers.map((paper) => [
+		paper.tags ?? '',
+		paper.title,
+		paper.authors,
+		new Date(paper.published).toLocaleDateString(),
+		new Date(paper.updated).toLocaleDateString(),
+		paper.primaryCategory,
+		paper.categories,
+		paper.comments ?? '',
+		paper.absLink,
+	])
+
+	let library = $state(initLibrary)
+
 	let selected: string[] = $state([])
 	function onRowsSelected(selectedIds: string[]) {
 		selected = selectedIds
 	}
+	async function removeSelected() {
+		let formData = new FormData()
+		formData.append('selected', JSON.stringify(selected))
+		const response = await fetch('/library?/removeFromLibrary', {
+			method: 'POST',
+			body: formData,
+		})
+		const result = await response.json()
+		const resultJson = JSON.parse(result.data)
+		console.log('Result:', resultJson)
+		if (resultJson[0].success) {
+			console.log('Data removed successfully')
+			library = library.filter((row) => !selected.includes(row[8]))
+		} else {
+			console.error('Error:', result.error)
+		}
+		console.log($state.snapshot(library))
+	}
+
+	$effect(() => {
+		console.log('InitLibrary:', $state.snapshot(initLibrary))
+		console.log('Library:', $state.snapshot(library))
+	})
 </script>
 
 <div class="flex flex-col gap-4">
-	<h1 class="text-lg font-semibold">Paper Library</h1>
+	<div class="flex flex-row justify-between items-center">
+		<h1 class="text-lg font-semibold">Paper Library</h1>
+		<Button onclick={removeSelected} class="bg-rose-300 text-slate-800"
+			>Remove Selected</Button
+		>
+	</div>
 	<LibraryTable {headers} data={library} {onRowsSelected} />
 </div>
