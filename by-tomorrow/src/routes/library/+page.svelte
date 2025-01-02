@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation'
-
 	import LibraryTable from '$lib/components/libraryTable.svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
 
@@ -26,7 +25,7 @@
 		paper.primaryCategory,
 		paper.categories,
 		paper.comments ?? '',
-		paper.absLink,
+		paper.pdfLink,
 	])
 
 	let library = $state(initLibrary)

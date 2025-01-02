@@ -91,6 +91,10 @@
 									<Badge variant="secondary">{tag}</Badge>
 								{/each}
 							</Table.Cell>
+						{:else if index === 8}
+							<Table.Cell>
+								<a href={cell}>{cell}</a>
+							</Table.Cell>
 						{:else}
 							<Table.Cell>{cell}</Table.Cell>
 						{/if}
