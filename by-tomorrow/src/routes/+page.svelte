@@ -16,6 +16,12 @@
 		<h2 class="text-left border-b-0 font-semibold px-4 mb-0">Features:</h2>
 		<!--Mode Options-->
 		<div class="flex flex-col mx-auto gap-y-4 gap-x-8 px-4 sm:px-6 lg:px-8">
+			<div class="grid gird-cols-1 md:grid-cols-3 gap-4 items-center">
+				<Button href="/search">Search</Button>
+				<p class="text-m md:col-span-2">
+					<strong>Search</strong>: Start by searching arxiv for papers to save.
+				</p>
+			</div>
 			<!-- Library Mode-->
 			<div class="grid gird-cols-1 md:grid-cols-3 gap-4 items-center">
 				<Button href="/library">Library</Button>

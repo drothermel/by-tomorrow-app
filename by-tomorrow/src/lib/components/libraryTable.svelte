@@ -2,37 +2,30 @@
 	import * as Table from '$lib/components/ui/table/index'
 	import { Badge } from '$lib/components/ui/badge/index'
 	import { Checkbox } from '$lib/components/ui/checkbox/index'
-
-	interface Props {
-		headers: string[]
-		data: string[][]
-		onRowsSelected: (selectedIds: string[]) => void
-	}
-	let { headers, data, onRowsSelected }: Props = $props()
-
-	type Data = {
+	export type TableData = {
 		id: string
 		data: string[]
 	}
 
+	interface Props {
+		headers: string[]
+		data: TableData[]
+		onRowsSelected: (selectedIds: string[]) => void
+	}
+	let { headers, data, onRowsSelected }: Props = $props()
+
 	let visibleHeaders: string[] = $derived(headers)
-	let allRows: Data[] = $derived(
-		data.map((row) => ({
-			id: row[headers.length - 1] ?? crypto.randomUUID(),
-			data: row,
-		}))
-	)
+	let allIds: string[] = $derived(data.map((row) => row.id))
 	let selectedRows: string[] = $state([])
 
 	function isSelected(id: string): boolean {
 		return selectedRows.includes(id)
 	}
 	function isAllSelected(): boolean {
-		return selectedRows.length === allRows.length
+		return selectedRows.length === allIds.length
 	}
 
 	function toggleRowSelected(id: string): void {
-		console.log('Selected toggle: ', id)
 		if (isSelected(id)) {
 			selectedRows = selectedRows.filter((rowId) => rowId !== id)
 		} else {
@@ -44,14 +37,10 @@
 		if (isAllSelected()) {
 			selectedRows = []
 		} else {
-			selectedRows = allRows.map((row) => row.id)
+			selectedRows = allIds
 		}
 		onRowsSelected(selectedRows)
 	}
-
-	$effect(() => {
-		console.log('Selected:', $state.snapshot(selectedRows))
-	})
 </script>
 
 <div class="w-full flex flex-col">
@@ -74,7 +63,7 @@
 			</Table.Row>
 		</Table.Header>
 		<Table.Body>
-			{#each allRows as row}
+			{#each data as row}
 				<Table.Row>
 					<Table.Cell>
 						<Checkbox
@@ -85,13 +74,13 @@
 						/>
 					</Table.Cell>
 					{#each row.data as cell, index}
-						{#if index === 0}
+						{#if headers[index].toLowerCase().includes('tags')}
 							<Table.Cell class="flex flex-wrap gap-1">
 								{#each JSON.parse(cell) as tag}
 									<Badge variant="secondary">{tag}</Badge>
 								{/each}
 							</Table.Cell>
-						{:else if index === 8}
+						{:else if headers[index].toLowerCase().includes('link')}
 							<Table.Cell>
 								<a href={cell}>{cell}</a>
 							</Table.Cell>

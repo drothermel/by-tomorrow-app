@@ -1,115 +1,42 @@
-import { PrismaClient } from '@prisma/client';
+import { type PaperMetadata, PrismaClient } from '@prisma/client';
 
 export const db = new PrismaClient();
 
-export type PaperMetadataInput = {
-    arxivId: string;
-    published: Date;
-    updated: Date;
-    title: string;
-    abstract: string;
-    authors: string;
-    absLink: string;
-    pdfLink: string;
-    categories: string;
-    primaryCategory: string;
-    comments?: string;
-    tags?: string;
-}
+export async function mergeInsertData(newData: PaperMetadata[]) {
+  console.log(newData)
+  try {
+      await db.$transaction(async (tx) => {
+          // Step 1: Separate new and existing entries
+          const targetArxivIds = newData.map(data => data.arxivId);
+          console.log(targetArxivIds)
 
-export async function findPaperByArxivId(arxivId: string) {
-    try {
-      const paper = await db.paperMetadataLibrary.findUnique({
-        where: { arxivId },
+
+          const existingEntries = await tx.paperMetadata.findMany({
+              where: { arxivId: { in: targetArxivIds } },
+          });
+
+          const existingIdsSet = new Set(existingEntries.map(entry => entry.id));
+          const newEntries = newData.filter(data => !existingIdsSet.has(data.id));
+          const updateEntries = newData.filter(data => existingIdsSet.has(data.id));
+
+          // Step 2: Bulk insert new entries
+          if (newEntries.length > 0) {
+              await tx.paperMetadata.createMany({
+                  data: newEntries,
+              });
+          }
+
+          // Step 3: Serially update existing entries
+          for (const data of updateEntries) {
+              const { id, ...updateData } = data;
+              await tx.paperMetadata.update({
+                  where: { id },
+                  data: updateData,
+              });
+          }
       });
-      return paper;
-    } catch (error) {
-      console.error('Error retrieving paper:', error);
-      throw error;
-    }
-}
-
-export async function addPaperMetadata(input: PaperMetadataInput) {
-    try {
-        const paper = await db.paperMetadataLibrary.upsert({
-            where: { arxivId: input.arxivId },
-            update: {
-                published: input.published,
-                updated: input.updated,
-                title: input.title,
-                abstract: input.abstract,
-                authors: input.authors,
-                absLink: input.absLink,
-                pdfLink: input.pdfLink,
-                categories: input.categories,
-                primaryCategory: input.primaryCategory,
-                comments: input.comments,
-                tags: input.tags,
-            },
-            create: {
-                arxivId: input.arxivId,
-                published: input.published,
-                updated: input.updated,
-                title: input.title,
-                abstract: input.abstract,
-                authors: input.authors,
-                absLink: input.absLink,
-                pdfLink: input.pdfLink,
-                categories: input.categories,
-                primaryCategory: input.primaryCategory,
-                comments: input.comments,
-                tags: input.tags,
-            },
-        });
-        return paper;
-    } catch (error) {
-        console.error('Error upserting paper metadata:', error);
-        throw error;
-    }
-}
-
-export async function upsertPapersInTransaction(papers: PaperMetadataInput[]) {
-    await db.$transaction(async (prisma) => {
-      for (const paper of papers) {
-        const existingPaper = await prisma.paperMetadataLibrary.findUnique({
-          where: { arxivId: paper.arxivId },
-        });
-  
-        if (existingPaper) {
-          await prisma.paperMetadataLibrary.update({
-            where: { arxivId: paper.arxivId },
-            data: {
-              published: new Date(paper.published),
-              updated: new Date(paper.updated),
-              title: paper.title,
-              abstract: paper.abstract,
-              authors: paper.authors,
-              absLink: paper.absLink,
-              pdfLink: paper.pdfLink,
-              categories: paper.categories,
-              primaryCategory: paper.primaryCategory,
-              comments: paper.comments,
-              tags: paper.tags,
-            },
-          });
-        } else {
-          await prisma.paperMetadataLibrary.create({
-            data: {
-              arxivId: paper.arxivId,
-              published: new Date(paper.published),
-              updated: new Date(paper.updated),
-              title: paper.title,
-              abstract: paper.abstract,
-              authors: paper.authors,
-              absLink: paper.absLink,
-              pdfLink: paper.pdfLink,
-              categories: paper.categories,
-              primaryCategory: paper.primaryCategory,
-              comments: paper.comments,
-              tags: paper.tags,
-            },
-          });
-        }
-      }
-    });
+      return { success: true };
+  } catch (error) {
+    return { success: false, error};
   }
+}

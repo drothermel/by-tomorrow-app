@@ -35,40 +35,44 @@
 		} else {
 			selected.add(elemId)
 		}
-		console.log(selected)
 	}
 	function handleCardClick(event: MouseEvent, elemId: string): void {
-		console.log(`Card ${elemId} clicked!`, event)
 		toggleSelected(elemId)
 	}
 	async function saveToLibrary() {
-		console.log('Save Selected to Library:', selected)
-		console.log('   used tags:', $tags)
-
 		// Get the data associated with the selected elements
 		let selectedData = data.filter((m) => selected.has(m.id))
-		console.log(selectedData)
 
-		// Make the form data request
-		const formData = new FormData()
-		formData.append('data', JSON.stringify(selectedData))
-		formData.append('tags', JSON.stringify($tags))
+		// Try to add it to the library
+		try {
+			const body = JSON.stringify({
+				action: 'addPaperMetadata',
+				data: {
+					data: selectedData,
+					tags: $tags.map((t) => t.value),
+				},
+			})
+			const response = await fetch('/api/papers', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body,
+			})
 
-		const response = await fetch('/search?/addToLibrary', {
-			method: 'POST',
-			body: formData,
-		})
+			if (!response.ok) {
+				const error = await response.json()
+				console.error('Error:', error)
+				alert(`Error: ${error.error || 'Unknown error'}`)
+				return
+			}
 
-		const result = await response.json()
-		const resultJson = JSON.parse(result.data)
-		console.log('Result:', resultJson)
-		if (resultJson[0].success) {
-			console.log('Metadata added successfully!')
-			// Update the local state to match
+			const result = await response.json()
 			library = new SvelteSet([...library, ...selected])
 			selected.clear()
-		} else {
-			console.error('Error:', result.error)
+		} catch (error) {
+			console.error('Network or server error:', error)
+			alert('An error occurred while communicating with the server.')
 		}
 	}
 </script>
