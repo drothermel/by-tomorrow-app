@@ -1,6 +1,9 @@
 import { z } from "zod";
 import { titleCase } from "title-case";
 
+import type { PaperMetadata } from '@prisma/client';
+import { PaperMetadataCreateInputObjectSchema } from "$lib/prisma/zod/schemas"
+
 // Use: stringToDateSchema.parse("2021-09-01T00:00:00Z")
 const stringToDateSchema = z.string().transform((val) => new Date(val));
 const normalizeToArray = <T extends z.ZodTypeAny>(schema: T) =>
@@ -16,7 +19,10 @@ function filterUndefined(obj: Object) {
     );
 }
 
-
+/** Page Server Types */
+export type LibraryPageData = {
+    papers: PaperMetadata[];
+}
 
 /** Arxiv Query Schemas */
 export const arxivSortByEnum = z.enum(["relevance", "lastUpdatedDate", "submittedDate"]);
@@ -133,3 +139,50 @@ export const arxivResponseSchema = z.object({
 }).passthrough().transform((data) => data.feed.entry);
 export type ArxivMetadataList = z.infer<typeof arxivResponseSchema>;
 export type ArxivMetadata = z.infer<typeof arxivEntrySchema>;
+
+/** API Schemas */
+
+export const paperApiSearchParamsSchema = z.object({
+    metadata: z.boolean().optional(),
+    arxivID: z.string().optional(),
+})
+export const paperApiRemoveDataSchema = z.object({
+    arxivIDs: z.array(z.string()).transform((data) => [...new Set(data)]),
+})
+
+export const paperApiBulkAddDataSchema = z.object({
+    data: z.array(arxivMetadataSchema),
+    tags: z.array(z.string()).optional().default([]),
+}).transform(
+    ({data, tags}) => data.map((entry) => {
+        const { id, updated, published, title, summary, author, links, category, primaryCategory, comment } = entry;
+        const transformed = {
+            arxivId: id,
+            published: new Date(published),
+            updated: new Date(updated),
+            title,
+            abstract: summary,
+            authors: Array.isArray(entry.author)
+            ? entry.author.join(', ')
+            : entry.author,
+            absLink: links.absLink || "",
+            pdfLink: links.pdfLink || "",
+            categories: Array.isArray(entry.category)
+            ? entry.category.join(', ')
+            : entry.category,
+            primaryCategory,
+            comments: comment,
+            tags: JSON.stringify(tags),
+        }
+        return transformed;
+    })
+).refine((transformedData) =>
+    transformedData.every((item) => {
+      let parseRes = PaperMetadataCreateInputObjectSchema.safeParse(item);
+      return parseRes.success;
+    }
+    ),
+    {
+      message: 'Transformed data does not match PaperMetadataCreateInputObjectSchema',
+    }
+);

@@ -11,7 +11,8 @@
 		"db:start": "docker compose up",
 		"db:push": "drizzle-kit push",
 		"db:migrate": "drizzle-kit migrate",
-		"db:studio": "drizzle-kit studio"
+		"db:studio": "drizzle-kit studio",
+		"postinstall": "pnpx prisma generate"
 	},
 	"devDependencies": {
 		"@melt-ui/pp": "^0.3.2",
@@ -24,6 +25,7 @@
 		"bits-ui": "1.0.0-next.76",
 		"clsx": "^2.1.1",
 		"lucide-svelte": "^0.460.1",
+		"prisma-zod-generator": "^0.8.13",
 		"svelte": "^5.16.0",
 		"svelte-check": "^4.1.1",
 		"tailwind-merge": "^2.6.0",
