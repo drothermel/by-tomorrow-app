@@ -2,24 +2,9 @@ import { PrismaClient } from '@prisma/client';
 
 export const db = new PrismaClient();
 
-export type PaperMetadataInput = {
-    arxivId: string;
-    published: Date;
-    updated: Date;
-    title: string;
-    abstract: string;
-    authors: string;
-    absLink: string;
-    pdfLink: string;
-    categories: string;
-    primaryCategory: string;
-    comments?: string;
-    tags?: string;
-}
-
 export async function findPaperByArxivId(arxivId: string) {
     try {
-      const paper = await db.paperMetadataLibrary.findUnique({
+      const paper = await db.paperMetadata.findUnique({
         where: { arxivId },
       });
       return paper;
@@ -29,9 +14,9 @@ export async function findPaperByArxivId(arxivId: string) {
     }
 }
 
-export async function addPaperMetadata(input: PaperMetadataInput) {
+export async function addPaperMetadata(input) {
     try {
-        const paper = await db.paperMetadataLibrary.upsert({
+        const paper = await db.paperMetadata.upsert({
             where: { arxivId: input.arxivId },
             update: {
                 published: input.published,
@@ -68,15 +53,15 @@ export async function addPaperMetadata(input: PaperMetadataInput) {
     }
 }
 
-export async function upsertPapersInTransaction(papers: PaperMetadataInput[]) {
+export async function upsertPapersInTransaction(papers) {
     await db.$transaction(async (prisma) => {
       for (const paper of papers) {
-        const existingPaper = await prisma.paperMetadataLibrary.findUnique({
+        const existingPaper = await prisma.paperMetadata.findUnique({
           where: { arxivId: paper.arxivId },
         });
   
         if (existingPaper) {
-          await prisma.paperMetadataLibrary.update({
+          await prisma.paperMetadata.update({
             where: { arxivId: paper.arxivId },
             data: {
               published: new Date(paper.published),
@@ -93,7 +78,7 @@ export async function upsertPapersInTransaction(papers: PaperMetadataInput[]) {
             },
           });
         } else {
-          await prisma.paperMetadataLibrary.create({
+          await prisma.paperMetadata.create({
             data: {
               arxivId: paper.arxivId,
               published: new Date(paper.published),
