@@ -34,6 +34,7 @@ model PaperMetadata {
   linkedSnippets      Int[]
   includedInDocuments Int[]
   roamPage            String?
+  read                String   @default("Unread")
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
