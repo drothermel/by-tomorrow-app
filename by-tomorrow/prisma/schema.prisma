@@ -27,6 +27,93 @@ model PaperMetadata {
   primaryCategory String
   comments        String?
   tags            String?
+  roamPage        String?
+  linkedQuestions Int[]
+  linkedClaims    Int[]
+  linkedTopics    Int[]
+  linkedDocuments Int[]
+  linkedSnippets  Int[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Questions {
+  id              Int      @id @default(autoincrement())
+  question        String
+  questionHistory String[]
+  tags            String?
+  linkedPapers    Int[]
+  linkedClaims    Int[]
+  linkedTopics    Int[]
+  linkedDocuments Int[]
+  linkedSnippets  Int[]
+  roamPage        String?
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+}
+
+model Claims {
+  id              Int      @id @default(autoincrement())
+  claim           String
+  claimHistory    String[]
+  tags            String?
+  linkedPapers    Int[]
+  linkedQuestions Int[]
+  linkedTopics    Int[]
+  linkedDocuments Int[]
+  linkedSnippets  Int[]
+  roamPage        String?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Topics {
+  id              Int      @id @default(autoincrement())
+  topic           String
+  topicHistory    String[]
+  tags            String?
+  linkedPapers    Int[]
+  linkedQuestions Int[]
+  linkedClaims    Int[]
+  linkedDocuments Int[]
+  linkedSnippets  Int[]
+  roamPage        String?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Documents {
+  id                  Int      @id @default(autoincrement())
+  documentText        String
+  documentTextHistory String[]
+  documentContents    Int[]
+  tags                String?
+  linkedPapers        Int[]
+  linkedQuestions     Int[]
+  linkedClaims        Int[]
+  linkedTopics        Int[]
+  linkedSnippets      Int[]
+  roamPage            String?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Snippets {
+  id                  Int      @id @default(autoincrement())
+  snippet             String
+  snippetHistory      String[]
+  tags                String?
+  linkedPapers        Int[]
+  linkedQuestions     Int[]
+  linkedClaims        Int[]
+  linkedTopics        Int[]
+  linkedDocuments     Int[]
+  includedInDocuments Int[]
+  roamPage            String?
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
