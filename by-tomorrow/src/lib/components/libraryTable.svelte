@@ -2,6 +2,9 @@
 	import * as Table from '$lib/components/ui/table/index'
 	import { Badge } from '$lib/components/ui/badge/index'
 	import { Checkbox } from '$lib/components/ui/checkbox/index'
+	import { Label } from '$lib/components/ui/label/index.js'
+	import Input from './ui/input/input.svelte'
+
 	export type TableData = {
 		id: string
 		data: string[]
@@ -13,6 +16,13 @@
 		onRowsSelected: (selectedIds: string[]) => void
 	}
 	let { headers, data, onRowsSelected }: Props = $props()
+	function sortByDateDescending(data: TableData[], index: number): TableData[] {
+		return data.sort((a, b) => {
+			const dateA = new Date(a.data[index])
+			const dateB = new Date(b.data[index])
+			return dateB.getTime() - dateA.getTime() // Most recent to oldest
+		})
+	}
 
 	let visibleHeaders: string[] = $derived(headers)
 	let allIds: string[] = $derived(data.map((row) => row.id))
@@ -41,7 +51,43 @@
 		}
 		onRowsSelected(selectedRows)
 	}
+	let includedTags: string = $state('')
+	let tagsList = $derived(
+		includedTags === '' ? [] : includedTags.split(',').map((tag) => tag.trim())
+	)
+	let tagsIndex = $derived(
+		headers.findIndex((header) => header.toLowerCase().includes('tags'))
+	)
+	let publishedIndex = $derived(
+		headers.findIndex((header) => header.toLowerCase().includes('published'))
+	)
+	let filteredData = $derived(
+		sortByDateDescending(
+			data.filter((row) => {
+				if (!row.data[tagsIndex]) {
+					return true
+				}
+				let rowTags = JSON.parse(row.data[tagsIndex])
+				return tagsList.every((tag) => rowTags.includes(tag))
+			}),
+			publishedIndex
+		)
+	)
+	$effect(() => {
+		console.log($state.snapshot(includedTags))
+		console.log($state.snapshot(filteredData))
+	})
 </script>
+
+<Label for="tagFilter" class="font-semibold">
+	Tag Filter
+	<Input
+		id="tagFilter"
+		bind:value={includedTags}
+		placeholder="Tags to Include"
+		class="w-full mb-4 mt-2"
+	></Input>
+</Label>
 
 <div class="w-full flex flex-col">
 	<Table.Root>
@@ -63,7 +109,7 @@
 			</Table.Row>
 		</Table.Header>
 		<Table.Body>
-			{#each data as row}
+			{#each filteredData as row}
 				<Table.Row>
 					<Table.Cell>
 						<Checkbox
