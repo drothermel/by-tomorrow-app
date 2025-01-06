@@ -39,47 +39,50 @@ model PaperMetadata {
 }
 
 model Questions {
-  id              Int      @id @default(autoincrement())
-  question        String
-  questionHistory String[]
-  tags            String?
-  linkedPapers    Int[]
-  linkedClaims    Int[]
-  linkedTopics    Int[]
-  linkedDocuments Int[]
-  linkedSnippets  Int[]
-  roamPage        String?
-  created_at      DateTime @default(now())
-  updated_at      DateTime @updatedAt
+  id                  Int      @id @default(autoincrement())
+  question            String
+  questionHistory     String[]
+  tags                String?
+  linkedPapers        Int[]
+  linkedClaims        Int[]
+  linkedTopics        Int[]
+  linkedDocuments     Int[]
+  linkedSnippets      Int[]
+  includedInDocuments Int[]
+  roamPage            String?
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
 }
 
 model Claims {
-  id              Int      @id @default(autoincrement())
-  claim           String
-  claimHistory    String[]
-  tags            String?
-  linkedPapers    Int[]
-  linkedQuestions Int[]
-  linkedTopics    Int[]
-  linkedDocuments Int[]
-  linkedSnippets  Int[]
-  roamPage        String?
+  id                  Int      @id @default(autoincrement())
+  claim               String
+  claimHistory        String[]
+  tags                String?
+  linkedPapers        Int[]
+  linkedQuestions     Int[]
+  linkedTopics        Int[]
+  linkedDocuments     Int[]
+  linkedSnippets      Int[]
+  includedInDocuments Int[]
+  roamPage            String?
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
 
 model Topics {
-  id              Int      @id @default(autoincrement())
-  topic           String
-  topicHistory    String[]
-  tags            String?
-  linkedPapers    Int[]
-  linkedQuestions Int[]
-  linkedClaims    Int[]
-  linkedDocuments Int[]
-  linkedSnippets  Int[]
-  roamPage        String?
+  id                  Int      @id @default(autoincrement())
+  topic               String
+  topicHistory        String[]
+  tags                String?
+  linkedPapers        Int[]
+  linkedQuestions     Int[]
+  linkedClaims        Int[]
+  linkedDocuments     Int[]
+  linkedSnippets      Int[]
+  includedInDocuments Int[]
+  roamPage            String?
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -96,6 +99,7 @@ model Documents {
   linkedClaims        Int[]
   linkedTopics        Int[]
   linkedSnippets      Int[]
+  includedInDocuments Int[]
   roamPage            String?
 
   created_at DateTime @default(now())
