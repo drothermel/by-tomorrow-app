@@ -16,6 +16,13 @@
 		onRowsSelected: (selectedIds: string[]) => void
 	}
 	let { headers, data, onRowsSelected }: Props = $props()
+	function sortByDateDescending(data: TableData[], index: number): TableData[] {
+		return data.sort((a, b) => {
+			const dateA = new Date(a.data[index])
+			const dateB = new Date(b.data[index])
+			return dateB.getTime() - dateA.getTime() // Most recent to oldest
+		})
+	}
 
 	let visibleHeaders: string[] = $derived(headers)
 	let allIds: string[] = $derived(data.map((row) => row.id))
@@ -51,14 +58,20 @@
 	let tagsIndex = $derived(
 		headers.findIndex((header) => header.toLowerCase().includes('tags'))
 	)
+	let publishedIndex = $derived(
+		headers.findIndex((header) => header.toLowerCase().includes('published'))
+	)
 	let filteredData = $derived(
-		data.filter((row) => {
-			if (!row.data[tagsIndex]) {
-				return true
-			}
-			let rowTags = JSON.parse(row.data[tagsIndex])
-			return tagsList.every((tag) => rowTags.includes(tag))
-		})
+		sortByDateDescending(
+			data.filter((row) => {
+				if (!row.data[tagsIndex]) {
+					return true
+				}
+				let rowTags = JSON.parse(row.data[tagsIndex])
+				return tagsList.every((tag) => rowTags.includes(tag))
+			}),
+			publishedIndex
+		)
 	)
 	$effect(() => {
 		console.log($state.snapshot(includedTags))
