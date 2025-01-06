@@ -14,25 +14,26 @@ generator zod {
 }
 
 model PaperMetadata {
-  id              Int      @id @default(autoincrement())
-  arxivId         String   @unique
-  published       DateTime
-  updated         DateTime
-  title           String
-  abstract        String
-  authors         String
-  absLink         String
-  pdfLink         String
-  categories      String
-  primaryCategory String
-  comments        String?
-  tags            String?
-  roamPage        String?
-  linkedQuestions Int[]
-  linkedClaims    Int[]
-  linkedTopics    Int[]
-  linkedDocuments Int[]
-  linkedSnippets  Int[]
+  id                  Int      @id @default(autoincrement())
+  arxivId             String   @unique
+  published           DateTime
+  updated             DateTime
+  title               String
+  abstract            String
+  authors             String
+  absLink             String
+  pdfLink             String
+  categories          String
+  primaryCategory     String
+  comments            String?
+  tags                String?
+  linkedQuestions     Int[]
+  linkedClaims        Int[]
+  linkedTopics        Int[]
+  linkedDocuments     Int[]
+  linkedSnippets      Int[]
+  includedInDocuments Int[]
+  roamPage            String?
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
