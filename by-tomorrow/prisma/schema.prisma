@@ -21,6 +21,7 @@ model PaperMetadata {
   title               String
   abstract            String
   authors             String
+  authorIds           Int[]
   absLink             String
   pdfLink             String
   categories          String
@@ -40,7 +41,7 @@ model PaperMetadata {
   updated_at DateTime @updatedAt
 }
 
-model Questions {
+model Question {
   id                  Int      @id @default(autoincrement())
   question            String
   questionHistory     String[]
@@ -56,7 +57,7 @@ model Questions {
   updated_at          DateTime @updatedAt
 }
 
-model Claims {
+model Claim {
   id                  Int      @id @default(autoincrement())
   claim               String
   claimHistory        String[]
@@ -73,7 +74,7 @@ model Claims {
   updated_at DateTime @updatedAt
 }
 
-model Topics {
+model Topic {
   id                  Int      @id @default(autoincrement())
   topic               String
   topicHistory        String[]
@@ -90,7 +91,7 @@ model Topics {
   updated_at DateTime @updatedAt
 }
 
-model Documents {
+model Document {
   id                  Int      @id @default(autoincrement())
   documentText        String
   documentTextHistory String[]
@@ -108,7 +109,7 @@ model Documents {
   updated_at DateTime @updatedAt
 }
 
-model Snippets {
+model Snippet {
   id                  Int      @id @default(autoincrement())
   snippet             String
   snippetHistory      String[]
@@ -123,4 +124,18 @@ model Snippets {
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+}
+
+model Author {
+  id                    Int      @id @default(autoincrement())
+  name                  String
+  tags                  String[]
+  institutions          String[]
+  links                 String[]
+  papers                Int[]
+  claims                Int[]
+  topics                Int[]
+  documents             Int[]
+  referencedInDocuments Int[]
+  notes                 String[]
 }
