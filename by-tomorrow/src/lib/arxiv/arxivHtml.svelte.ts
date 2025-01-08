@@ -85,6 +85,8 @@ export interface Figure {
     tagName: string;
     classNames: string[];
 
+    title?: Title;
+    titleStr?: string;
     caption?: string;
     figName?: string;
 }
@@ -107,6 +109,8 @@ export interface Equation {
     classNames: string[];
     visible: boolean;
 
+    title?: Title;
+    titleStr?: string;
     html: string;
     latexStrings: string[];
 }
@@ -116,6 +120,8 @@ export interface UnknownTag {
     tagName: string;
     classNames: string[];
 
+    title?: Title;
+    titleStr?: string;
     html?: string;
 }
 type SectionContent = Paragraph | Section | Figure | Equation | UnknownTag;
@@ -349,7 +355,7 @@ export function parseContainer(ch: CheerioAPI, container: Element): SectionConte
         let contentElem = content[0];
         if (title !== undefined) {
             if (contentElem.type !== 'paragraph') {
-                throw new Error('Title found but content is not a paragraph');
+                console.error("Title found but content is not a paragraph")
             }
             contentElem.title = title;
             contentElem.titleStr = title.text;
@@ -476,6 +482,7 @@ export function parseMainSection(ch: CheerioAPI): Section {
         id: article.attr('id') || 'unknown',
         tagName: article.prop('tagName')?.toLowerCase() || 'unknown',
         classNames: article.attr('class')?.split(/\s+/) || [],
+        titleString: '',
         content: paperSections,
     };
 }

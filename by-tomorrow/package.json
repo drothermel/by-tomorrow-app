@@ -11,8 +11,7 @@
 		"db:start": "docker compose up",
 		"db:push": "drizzle-kit push",
 		"db:migrate": "drizzle-kit migrate",
-		"db:studio": "drizzle-kit studio",
-		"postinstall": "pnpx prisma generate"
+		"db:studio": "drizzle-kit studio"
 	},
 	"devDependencies": {
 		"@melt-ui/pp": "^0.3.2",
@@ -36,7 +35,7 @@
 		"vite": "^5.4.11"
 	},
 	"dependencies": {
-		"@prisma/client": "^6.1.0",
+		"@prisma/client": "^6.2.0",
 		"@zerodevx/svelte-json-view": "^1.0.11",
 		"cheerio": "^1.0.0",
 		"marked": "^15.0.4",

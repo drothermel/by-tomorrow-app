@@ -8,10 +8,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator zod {
-  provider = "prisma-zod-generator"
-  output   = "../src/lib/prisma/zod" // Adjust the output path as needed
-}
+// generator zod {
+//   provider = "prisma-zod-generator"
+//   output   = "../src/lib/prisma/zod" // Adjust the output path as needed
+// }
 
 model PaperMetadata {
   id                  Int      @id @default(autoincrement())
@@ -36,6 +36,17 @@ model PaperMetadata {
   includedInDocuments Int[]
   roamPage            String?
   read                String   @default("Unread")
+  paperDataViewParams String?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model PaperData {
+  id           Int    @id @default(autoincrement())
+  arxivId      String @unique
+  paperText    String
+  paperDataStr String
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
