@@ -1,5 +1,5 @@
 import type { ArxivQuery, ArxivMetadataList, SortByType } from "$lib/schemas"
-import { queryArxiv } from "$lib/components/arxiv.svelte";
+import { queryArxiv } from "$lib/arxiv/arxiv.svelte";
 import type { ActionData } from "./types";
 import { db } from '$lib/database';
 
