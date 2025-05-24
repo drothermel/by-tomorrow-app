@@ -1,10 +1,8 @@
 <script lang="ts">
-	import LibraryTable from '$lib/components/libraryTable.svelte'
-	import Button from '$lib/components/ui/button/button.svelte'
-	import type { TableData } from '$lib/components/libraryTable.svelte'
-	import type { LibraryPageData } from '$lib/schemas.js'
-	import type { PaperMetadata } from '@prisma/client'
-	import { onMount } from 'svelte'
+	import { invalidateAll } from '$app/navigation'
+import LibraryTable from '$lib/components/libraryTable.svelte'
+import Button from '$lib/components/ui/button/button.svelte'
+import logger from '$lib/logger'
 
 	let { data }: { data: LibraryPageData } = $props()
 
@@ -65,36 +63,29 @@
 	function onRowsSelected(selectedIds: string[]) {
 		selected = selectedIds
 	}
-	async function removeSelectedFromLibrary() {
-		try {
-			const response = await fetch('/api/papers', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					action: 'removePaperMetadata',
-					data: { arxivIDs: selected },
-				}),
-			})
+	async function removeSelected() {
+		let formData = new FormData()
+		formData.append('selected', JSON.stringify(selected))
+		const response = await fetch('/library?/removeFromLibrary', {
+			method: 'POST',
+			body: formData,
+		})
+		const result = await response.json()
+               const resultJson = JSON.parse(result.data)
+               logger.log('Result:', resultJson)
+               if (resultJson[0].success) {
+                       logger.log('Data removed successfully')
+                       library = library.filter((row) => !selected.includes(row[8]))
+               } else {
+                       logger.error('Error:', result.error)
+               }
+               logger.log($state.snapshot(library))
+       }
 
-			if (!response.ok) {
-				const error = await response.json()
-				console.error('Error:', error)
-				alert(`Error: ${error.error || 'Unknown error'}`)
-				return
-			}
-
-			const result = await response.json()
-			selected = []
-			await fetchPapers()
-		} catch (error) {
-			console.error('Network or server error:', error)
-			alert('An error occurred while communicating with the server.')
-		}
-	}
-
-	onMount(fetchPapers)
+	$effect(() => {
+               logger.log('InitLibrary:', $state.snapshot(initLibrary))
+               logger.log('Library:', $state.snapshot(library))
+       })
 </script>
 
 <div class="flex flex-col gap-4">

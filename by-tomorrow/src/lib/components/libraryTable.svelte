@@ -1,9 +1,8 @@
 <script lang="ts">
 	import * as Table from '$lib/components/ui/table/index'
-	import { Badge } from '$lib/components/ui/badge/index'
-	import { Checkbox } from '$lib/components/ui/checkbox/index'
-	import { Label } from '$lib/components/ui/label/index.js'
-	import Input from './ui/input/input.svelte'
+import { Badge } from '$lib/components/ui/badge/index'
+import { Checkbox } from '$lib/components/ui/checkbox/index'
+import logger from '$lib/logger'
 
 	export type TableData = {
 		id: string
@@ -35,7 +34,8 @@
 		return selectedRows.length === allIds.length
 	}
 
-	function toggleRowSelected(id: string): void {
+       function toggleRowSelected(id: string): void {
+               logger.log('Selected toggle: ', id)
 		if (isSelected(id)) {
 			selectedRows = selectedRows.filter((rowId) => rowId !== id)
 		} else {
@@ -51,32 +51,10 @@
 		}
 		onRowsSelected(selectedRows)
 	}
-	let includedTags: string = $state('')
-	let tagsList = $derived(
-		includedTags === '' ? [] : includedTags.split(',').map((tag) => tag.trim())
-	)
-	let tagsIndex = $derived(
-		headers.findIndex((header) => header.toLowerCase().includes('tags'))
-	)
-	let publishedIndex = $derived(
-		headers.findIndex((header) => header.toLowerCase().includes('published'))
-	)
-	let filteredData = $derived(
-		sortByDateDescending(
-			data.filter((row) => {
-				if (!row.data[tagsIndex]) {
-					return true
-				}
-				let rowTags = JSON.parse(row.data[tagsIndex])
-				return tagsList.every((tag) => rowTags.includes(tag))
-			}),
-			publishedIndex
-		)
-	)
-	$effect(() => {
-		console.log($state.snapshot(includedTags))
-		console.log($state.snapshot(filteredData))
-	})
+
+       $effect(() => {
+               logger.log('Selected:', $state.snapshot(selectedRows))
+       })
 </script>
 
 <Label for="tagFilter" class="font-semibold">
