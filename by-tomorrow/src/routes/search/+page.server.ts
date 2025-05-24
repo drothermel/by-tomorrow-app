@@ -1,6 +1,6 @@
 import type { ArxivQuery, ArxivMetadataList, SortByType } from "$lib/schemas"
 import { z } from 'zod';
-import { queryArxiv } from "$lib/components/arxiv.svelte";
+import { queryArxiv } from "$lib/components/search/arxiv.svelte";
 import type { ActionData } from "./types";
 import { arxivMetadataSchema } from '$lib/schemas';
 import type { PaperMetadataInput } from '$lib/database';
