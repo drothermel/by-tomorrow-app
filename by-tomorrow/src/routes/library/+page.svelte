@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation'
-	import LibraryTable from '$lib/components/libraryTable.svelte'
+import LibraryTable from '$lib/components/library/libraryTable.svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
 
 	let { data } = $props()
