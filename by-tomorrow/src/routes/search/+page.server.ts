@@ -6,6 +6,7 @@ import { arxivMetadataSchema } from '$lib/schemas';
 import type { PaperMetadataInput } from '$lib/database';
 import { upsertPapersInTransaction } from '$lib/database';
 import { db } from '$lib/database';
+import logger from '$lib/logger'
 
 export const load = async () => {
   // Fetch all arxivId values from the database
@@ -61,7 +62,7 @@ export const actions = {
             // Parse raw JSON data into an array
             const jsonData = JSON.parse(rawData as string) as unknown[];
             const validatedData = z.array(arxivMetadataSchema).parse(jsonData);
-            console.log("After validate data")
+            logger.log("After validate data")
             const jsonTags = JSON.parse(rawTags as string) as unknown;
             const validatedTags = z.array(
               z.object({
@@ -70,9 +71,9 @@ export const actions = {
               })
             ).transform((data) => data.map((tag) => tag.value)).parse(jsonTags);
             const tagStr = JSON.stringify(validatedTags);
-            console.log("Tags", jsonTags);
-            console.log("Validated Tags", validatedTags);
-            console.log("Tag str", tagStr);
+            logger.log("Tags", jsonTags);
+            logger.log("Validated Tags", validatedTags);
+            logger.log("Tag str", tagStr);
       
             // Map validated data to match Prisma's PaperMetadataInput
             const metadataList: PaperMetadataInput[] = validatedData.map((entry) => ({
@@ -97,7 +98,7 @@ export const actions = {
             await upsertPapersInTransaction(metadataList);
             return { success: true };
           } catch (error) {
-            console.error('Error adding to library:', error);
+            logger.error('Error adding to library:', error);
             return { success: false, error: 'Failed to add metadata to library.' };
           }
 

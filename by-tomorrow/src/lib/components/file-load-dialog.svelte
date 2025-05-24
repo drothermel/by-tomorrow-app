@@ -1,9 +1,10 @@
 <script lang="ts">
 	import * as Dialog from '$lib/components/ui/dialog/index'
-	import * as Tabs from '$lib/components/ui/tabs/index'
-	import * as Card from '$lib/components/ui/card/index'
-	import { Button, buttonVariants } from '$lib/components/ui/button/index'
-	import FileUp from 'lucide-svelte/icons/file-up'
+import * as Tabs from '$lib/components/ui/tabs/index'
+import * as Card from '$lib/components/ui/card/index'
+import { Button, buttonVariants } from '$lib/components/ui/button/index'
+import FileUp from 'lucide-svelte/icons/file-up'
+import logger from '$lib/logger'
 
 	class FileLoadDialogProps {
 		input?: HTMLInputElement = $state()
@@ -19,7 +20,7 @@
 		}
 
 		handle_input_change(event: Event) {
-			console.log('File change!')
+                       logger.log('File change!')
 			const input = event.target as HTMLInputElement
 			if (input.files && input.files.length > 0) {
 				const file = input.files[0]
@@ -32,16 +33,16 @@
 
 				this.selected = input.files[0]
 			}
-			console.log(this.selected)
+                       logger.log(this.selected)
 		}
 
 		handle_trigger_input() {
-			console.log('select button clicked')
+                       logger.log('select button clicked')
 			this.input?.click()
 		}
 
 		handle_upload(): void {
-			console.log('File uploaded!')
+                       logger.log('File uploaded!')
 		}
 
 		// Save the PDF (creates a downloadable link)

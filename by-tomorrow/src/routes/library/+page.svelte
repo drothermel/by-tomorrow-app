@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation'
-	import LibraryTable from '$lib/components/libraryTable.svelte'
-	import Button from '$lib/components/ui/button/button.svelte'
+import LibraryTable from '$lib/components/libraryTable.svelte'
+import Button from '$lib/components/ui/button/button.svelte'
+import logger from '$lib/logger'
 
 	let { data } = $props()
 
@@ -42,21 +43,21 @@
 			body: formData,
 		})
 		const result = await response.json()
-		const resultJson = JSON.parse(result.data)
-		console.log('Result:', resultJson)
-		if (resultJson[0].success) {
-			console.log('Data removed successfully')
-			library = library.filter((row) => !selected.includes(row[8]))
-		} else {
-			console.error('Error:', result.error)
-		}
-		console.log($state.snapshot(library))
-	}
+               const resultJson = JSON.parse(result.data)
+               logger.log('Result:', resultJson)
+               if (resultJson[0].success) {
+                       logger.log('Data removed successfully')
+                       library = library.filter((row) => !selected.includes(row[8]))
+               } else {
+                       logger.error('Error:', result.error)
+               }
+               logger.log($state.snapshot(library))
+       }
 
 	$effect(() => {
-		console.log('InitLibrary:', $state.snapshot(initLibrary))
-		console.log('Library:', $state.snapshot(library))
-	})
+               logger.log('InitLibrary:', $state.snapshot(initLibrary))
+               logger.log('Library:', $state.snapshot(library))
+       })
 </script>
 
 <div class="flex flex-col gap-4">
