@@ -8,7 +8,7 @@
 	import { Input } from '$lib/components/ui/input/index'
 	import { Label } from '$lib/components/ui/label/index.js'
 
-	import CardLibrary from '$lib/components/cardLibrary.svelte'
+import CardLibrary from '$lib/components/search/cardLibrary.svelte'
 
 	let { data, form }: { data: any; form: ActionData } = $props()
 	const startIds = $state(data.arxivIds)
