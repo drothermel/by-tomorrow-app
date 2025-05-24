@@ -2,6 +2,7 @@ import convert from "xml-js";
 import { validateSchema } from '$lib/utils';
 import type { ArxivQuery, ArxivMetadataList} from "$lib/schemas";
 import { arxivResponseSchema } from "$lib/schemas";
+import logger from '$lib/logger'
 
 export const QUERY_BASE: string = 'https://export.arxiv.org/api/query?';
 
@@ -29,7 +30,7 @@ export async function queryArxiv(query: ArxivQuery): Promise<ArxivMetadataList> 
             });
         } catch (error) {
             // Handle validation or parsing errors
-            console.error('Error parsing and validating response:', error);
+            logger.error('Error parsing and validating response:', error);
         }
         return [] as ArxivMetadataList;
 }

@@ -1,4 +1,5 @@
 import { db } from '$lib/database';
+import logger from '$lib/logger'
 
 export const load = async () => {
     // Fetch all arxivId values from the database
@@ -17,7 +18,7 @@ export const actions = {
             const toRemove = formData.get('selected');
             if (toRemove) {
                 const arxivIds = JSON.parse(toRemove as string) as string[];
-                console.log("To Remove:", toRemove)
+                logger.log("To Remove:", toRemove)
 
                 if (Array.isArray(arxivIds) && arxivIds.length > 0) {
                 
@@ -28,11 +29,11 @@ export const actions = {
                             },
                         },
                     });
-                    console.log(`Deleted ${result.count} records.`);
+                    logger.log(`Deleted ${result.count} records.`);
                     return {success: true};
                 }
             } else {
-                console.log("No toRemove:", toRemove)
+                logger.log("No toRemove:", toRemove)
             }
         } catch (error) {
             return { success: false, error: 'Something went wrong' };
