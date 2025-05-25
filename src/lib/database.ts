@@ -3,18 +3,20 @@ import { dev } from '$app/environment'
 
 let prisma: PrismaClient
 if (dev) {
-       // Avoid creating new instances during hot reload
-       const globalWithPrisma = globalThis as typeof globalThis & {
-               prisma?: PrismaClient
-       }
-       prisma = globalWithPrisma.prisma || new PrismaClient()
-       globalWithPrisma.prisma = prisma
+	// Avoid creating new instances during hot reload when in dev mode
+	const globalWithPrisma = globalThis as typeof globalThis & {
+		prisma?: PrismaClient
+	}
+	prisma = globalWithPrisma.prisma || new PrismaClient()
+	globalWithPrisma.prisma = prisma
 } else {
-       prisma = new PrismaClient()
+	prisma = new PrismaClient()
 }
 
+/** Prisma client instance used across the application. */
 export const db = prisma
 
+/** Input type used when upserting paper metadata. */
 export type PaperMetadataInput = {
 	arxivId: string
 	published: Date
@@ -30,6 +32,9 @@ export type PaperMetadataInput = {
 	tags?: string
 }
 
+/**
+ * Retrieve a paper by arXiv identifier.
+ */
 export async function findPaperByArxivId(arxivId: string) {
 	try {
 		const paper = await db.paperMetadataLibrary.findUnique({
@@ -42,6 +47,9 @@ export async function findPaperByArxivId(arxivId: string) {
 	}
 }
 
+/**
+ * Insert or update a single paper metadata record.
+ */
 export async function addPaperMetadata(input: PaperMetadataInput) {
 	try {
 		const paper = await db.paperMetadataLibrary.upsert({
@@ -81,10 +89,14 @@ export async function addPaperMetadata(input: PaperMetadataInput) {
 	}
 }
 
+/**
+ * Upsert multiple papers within a single transaction. Existing records are
+ * updated and new ones are created.
+ */
 export async function upsertPapersInTransaction(
-       papers: PaperMetadataInput[]
+	papers: PaperMetadataInput[]
 ): Promise<void> {
-       await db.$transaction(async (prisma: Prisma.TransactionClient) => {
+	await db.$transaction(async (prisma: Prisma.TransactionClient) => {
 		for (const paper of papers) {
 			const existingPaper = await prisma.paperMetadataLibrary.findUnique({
 				where: { arxivId: paper.arxivId },

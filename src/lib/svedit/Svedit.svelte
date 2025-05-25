@@ -1,8 +1,8 @@
 <script lang="ts">
-       import SveditSession from '$lib/svedit/SveditSession.svelte'
-       import { setSveditSession } from '$lib/svedit/context'
-       import Block from '$lib/svedit/Block.svelte'
-       import logger from '$lib/logger'
+	import SveditSession from '$lib/svedit/SveditSession.svelte'
+	import { setSveditSession } from '$lib/svedit/context'
+	import Block from '$lib/svedit/Block.svelte'
+	import logger from '$lib/logger'
 
 	let {
 		sveditSession,
@@ -15,15 +15,19 @@
 	} = $props()
 	setSveditSession(sveditSession)
 
-       function onbeforeinput(event: any) {
-               const inserted_char = event.data
+	/**
+	 * Experimental handler that logs text insertion attempts. Prevents the
+	 * default browser behaviour so we can intercept input.
+	 */
+	function onbeforeinput(event: any) {
+		const inserted_char = event.data
 
-               event.preventDefault()
-               if (inserted_char) {
-                       logger.log('tried to insert text: ', inserted_char)
-                       // entry_session.insert_text(inserted_char);
-               }
-       }
+		event.preventDefault()
+		if (inserted_char) {
+			logger.log('tried to insert text: ', inserted_char)
+			// entry_session.insert_text(inserted_char);
+		}
+	}
 </script>
 
 <div class="svedit">
