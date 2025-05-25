@@ -1,0 +1,14 @@
+module.exports = {
+  semi: false,
+  useTabs: true,
+  singleQuote: true,
+  trailingComma: 'es5',
+  printWidth: 80,
+  plugins: ['prettier-plugin-svelte'],
+  overrides: [{ files: '*.svelte', options: { parser: 'svelte' } }],
+  svelteSortOrder: 'options-scripts-markup-styles',
+  svelteStrictMode: false,
+  svelteBracketNewLine: true,
+  svelteAllowShorthand: true,
+  svelteIndentScriptAndStyle: true,
+}

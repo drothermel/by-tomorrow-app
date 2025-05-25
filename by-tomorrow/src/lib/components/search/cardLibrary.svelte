@@ -7,8 +7,8 @@
 	import * as Dialog from '$lib/components/ui/dialog'
 	import { Separator } from '$lib/components/ui/separator/index.js'
 
-import { X } from 'lucide-svelte'
-import logger from '$lib/logger'
+	import { X } from 'lucide-svelte'
+	import logger from '$lib/logger'
 
 	import type { ArxivMetadataList, ArxivQuery } from './../schemas.ts'
 	import PaperCard from '$lib/components/cards/paperCard.svelte'
@@ -30,25 +30,25 @@ import logger from '$lib/logger'
 	} = createTagsInput()
 	let library: SvelteSet<string> = $state(new SvelteSet(libraryInit))
 	let selected: SvelteSet<string> = $state(new SvelteSet())
-       function toggleSelected(elemId: string): void {
-               if (selected.has(elemId)) {
-                       selected.delete(elemId)
-               } else {
-                       selected.add(elemId)
-               }
-               logger.log(selected)
-       }
-       function handleCardClick(event: MouseEvent, elemId: string): void {
-               logger.log(`Card ${elemId} clicked!`, event)
-               toggleSelected(elemId)
-       }
-       async function saveToLibrary() {
-               logger.log('Save Selected to Library:', selected)
-               logger.log('   used tags:', $tags)
+	function toggleSelected(elemId: string): void {
+		if (selected.has(elemId)) {
+			selected.delete(elemId)
+		} else {
+			selected.add(elemId)
+		}
+		logger.log(selected)
+	}
+	function handleCardClick(event: MouseEvent, elemId: string): void {
+		logger.log(`Card ${elemId} clicked!`, event)
+		toggleSelected(elemId)
+	}
+	async function saveToLibrary() {
+		logger.log('Save Selected to Library:', selected)
+		logger.log('   used tags:', $tags)
 
 		// Get the data associated with the selected elements
-               let selectedData = data.filter((m) => selected.has(m.id))
-               logger.log(selectedData)
+		let selectedData = data.filter((m) => selected.has(m.id))
+		logger.log(selectedData)
 
 		// Make the form data request
 		const formData = new FormData()
@@ -61,15 +61,15 @@ import logger from '$lib/logger'
 		})
 
 		const result = await response.json()
-               const resultJson = JSON.parse(result.data)
-               logger.log('Result:', resultJson)
+		const resultJson = JSON.parse(result.data)
+		logger.log('Result:', resultJson)
 		if (resultJson[0].success) {
-                       logger.log('Metadata added successfully!')
+			logger.log('Metadata added successfully!')
 			// Update the local state to match
 			library = new SvelteSet([...library, ...selected])
 			selected.clear()
 		} else {
-                       logger.error('Error:', result.error)
+			logger.error('Error:', result.error)
 		}
 	}
 </script>

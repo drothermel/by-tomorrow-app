@@ -1,7 +1,7 @@
 <script>
-       import { onMount } from 'svelte'
-       import * as mupdf from 'mupdf'
-       import logger from '$lib/logger'
+	import { onMount } from 'svelte'
+	import * as mupdf from 'mupdf'
+	import logger from '$lib/logger'
 
 	export let pdfUrl = ''
 
@@ -41,7 +41,7 @@
 			context.putImageData(imageData, 0, 0)
 		} catch (err) {
 			error = 'Failed to load PDF.'
-                       logger.error(err)
+			logger.error(err)
 		}
 	})
 </script>

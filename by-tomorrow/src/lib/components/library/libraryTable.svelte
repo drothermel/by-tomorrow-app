@@ -1,8 +1,8 @@
 <script lang="ts">
 	import * as Table from '$lib/components/ui/table/index'
-import { Badge } from '$lib/components/ui/badge/index'
-import { Checkbox } from '$lib/components/ui/checkbox/index'
-import logger from '$lib/logger'
+	import { Badge } from '$lib/components/ui/badge/index'
+	import { Checkbox } from '$lib/components/ui/checkbox/index'
+	import logger from '$lib/logger'
 
 	interface Props {
 		headers: string[]
@@ -32,8 +32,8 @@ import logger from '$lib/logger'
 		return selectedRows.length === allRows.length
 	}
 
-       function toggleRowSelected(id: string): void {
-               logger.log('Selected toggle: ', id)
+	function toggleRowSelected(id: string): void {
+		logger.log('Selected toggle: ', id)
 		if (isSelected(id)) {
 			selectedRows = selectedRows.filter((rowId) => rowId !== id)
 		} else {
@@ -50,9 +50,9 @@ import logger from '$lib/logger'
 		onRowsSelected(selectedRows)
 	}
 
-       $effect(() => {
-               logger.log('Selected:', $state.snapshot(selectedRows))
-       })
+	$effect(() => {
+		logger.log('Selected:', $state.snapshot(selectedRows))
+	})
 </script>
 
 <div class="w-full flex flex-col">
