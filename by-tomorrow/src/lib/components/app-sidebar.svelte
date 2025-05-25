@@ -1,5 +1,12 @@
 <script>
-	import { House, Search, Library, SquareChartGantt, PencilRuler, CloudUpload } from 'lucide-svelte';
+	import {
+		House,
+		Search,
+		Library,
+		SquareChartGantt,
+		PencilRuler,
+		CloudUpload,
+	} from 'lucide-svelte'
 
 	import * as Sidebar from '$lib/components/ui/sidebar/index'
 	// import * as Avatar from '$lib/components/ui/avatar/index'
