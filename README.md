@@ -1,65 +1,29 @@
 # By Tomorrow - Research Paper Management App
 
-By Tomorrow is a SvelteKit application for organizing research papers. It lets you search [arXiv](https://arxiv.org), tag papers, and maintain a library for easy reference. The project also includes a custom document editor and PDF viewer to help manage reading notes.
+**By Tomorrow** is a SvelteKit application for organising research papers and notes. It provides a workflow for searching [arXiv](https://arxiv.org), tagging papers, managing a personal library and experimenting with a custom document editor. The code base has been refactored extensively and these README files serve as a guide for future contributors.
 
-## Development setup
+## Quick start
 
-1. Copy `.env.example` to `.env` and adjust the values as needed. The file
-   defines environment variables such as `DATABASE_URL` for Prisma and
-   `VITE_ENABLE_LOGGING` to control console output.
-2. Install dependencies with your preferred package manager (npm or pnpm):
+1. Copy `.env.example` to `.env` and adjust the variables such as `DATABASE_URL` and `VITE_ENABLE_LOGGING`.
+2. Install dependencies with `pnpm install` (or `npm install`).
+3. Initialise the database:
    ```bash
-   pnpm install
-   # or
-   npm install
+   npm run db:push
    ```
-3. Start the development server:
+4. Launch the dev server:
    ```bash
    npm run dev
    ```
-   The app will be available at `http://localhost:5173` by default.
+   Visit [http://localhost:5173](http://localhost:5173) to view the app.
 
-### PDF viewer dependency
+More detailed setup instructions and component documentation live in the [`docs/`](docs/) directory.
 
-The `pdfViewer` component expects a module named `mupdf`. A simple type
-declaration is included at `src/mupdf.d.ts` so the code compiles even when the
-package is missing. To use the real library, install it with your package
-manager:
+## Features
 
-```bash
-pnpm add mupdf
-```
-
-After installing the module you can delete `src/mupdf.d.ts` since the explicit
-type declaration is no longer required.
-
-## Database
-
-The app uses Prisma with a SQLite database. Copy `.env.example` to `.env` and edit
-the variables as needed. `DATABASE_URL` configures the database connection and
-`VITE_ENABLE_LOGGING` can be set to `false` to silence console logs. After
-configuring your environment, initialize the database with:
-```
-npm run db:push
-```
-
-You can open Prisma Studio to explore the data:
-```bash
-npm run db:studio
-```
-
-## Running tests
-
-There are currently no automated tests for this project.
-
-## Roadmap
-
-- Search arXiv and save metadata with custom tags
-- View your paper library and remove entries
+- arXiv search and library management
 - PDF viewer with editable URL input
-- Rich-text editor built with Svedit
-- Upcoming: login flow and file manager
+- Experimental editor built with the in‑house **Svedit** framework
 
 ## License
 
-This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the Creative Commons Attribution‑NonCommercial 4.0 International License. See [LICENSE](LICENSE) for details.
