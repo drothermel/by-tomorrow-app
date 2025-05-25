@@ -107,7 +107,10 @@ export default class SveditSession {
 		// If the existingElement has been found, verify that the key
 		// type matches the element type
 		if (!this.canSetKey(existingElem, newKey)) {
-			// TODO: does this need to be a snapshot or clone of snapshot??
+			// The snapshot taken earlier was for a failed update.
+			// Discard it so the invalid state isn't recorded in
+			// the session history.
+			this.clearStateSnapshot()
 			return {
 				success: false,
 				failedElem: existingElem,
