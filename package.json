@@ -24,6 +24,7 @@
 		"bits-ui": "1.0.0-next.76",
 		"clsx": "^2.1.1",
 		"lucide-svelte": "^0.460.1",
+		"prisma": "^6.8.2",
 		"svelte": "^5.16.0",
 		"svelte-check": "^4.1.1",
 		"tailwind-merge": "^2.6.0",
