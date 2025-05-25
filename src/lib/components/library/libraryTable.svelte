@@ -2,7 +2,12 @@
 	import * as Table from '$lib/components/ui/table/index'
 	import { Badge } from '$lib/components/ui/badge/index'
 	import { Checkbox } from '$lib/components/ui/checkbox/index'
+<<<<<<< HEAD:src/lib/components/library/libraryTable.svelte
 	import logger from '$lib/logger'
+=======
+	import { Label } from '$lib/components/ui/label/index.js'
+	import Input from './ui/input/input.svelte'
+>>>>>>> keep_html_reader:by-tomorrow/src/lib/components/libraryTable.svelte
 
 	export type TableData = {
 		id: string
@@ -51,9 +56,37 @@
 		}
 		onRowsSelected(selectedRows)
 	}
+<<<<<<< HEAD:src/lib/components/library/libraryTable.svelte
 
 	$effect(() => {
 		logger.log('Selected:', $state.snapshot(selectedRows))
+=======
+	let includedTags: string = $state('')
+	let tagsList = $derived(
+		includedTags === '' ? [] : includedTags.split(',').map((tag) => tag.trim())
+	)
+	let tagsIndex = $derived(
+		headers.findIndex((header) => header.toLowerCase().includes('tags'))
+	)
+	let publishedIndex = $derived(
+		headers.findIndex((header) => header.toLowerCase().includes('published'))
+	)
+	let filteredData = $derived(
+		sortByDateDescending(
+			data.filter((row) => {
+				if (!row.data[tagsIndex]) {
+					return true
+				}
+				let rowTags = JSON.parse(row.data[tagsIndex])
+				return tagsList.every((tag) => rowTags.includes(tag))
+			}),
+			publishedIndex
+		)
+	)
+	$effect(() => {
+		console.log($state.snapshot(includedTags))
+		console.log($state.snapshot(filteredData))
+>>>>>>> keep_html_reader:by-tomorrow/src/lib/components/libraryTable.svelte
 	})
 </script>
 

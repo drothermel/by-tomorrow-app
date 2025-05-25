@@ -1,0 +1,152 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// generator zod {
+//   provider = "prisma-zod-generator"
+//   output   = "../src/lib/prisma/zod" // Adjust the output path as needed
+// }
+
+model PaperMetadata {
+  id                  Int      @id @default(autoincrement())
+  arxivId             String   @unique
+  published           DateTime
+  updated             DateTime
+  title               String
+  abstract            String
+  authors             String
+  authorIds           Int[]
+  absLink             String
+  pdfLink             String
+  categories          String
+  primaryCategory     String
+  comments            String?
+  tags                String?
+  linkedQuestions     Int[]
+  linkedClaims        Int[]
+  linkedTopics        Int[]
+  linkedDocuments     Int[]
+  linkedSnippets      Int[]
+  includedInDocuments Int[]
+  roamPage            String?
+  read                String   @default("Unread")
+  paperDataViewParams String?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model PaperData {
+  id           Int    @id @default(autoincrement())
+  arxivId      String @unique
+  paperText    String
+  paperDataStr String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Question {
+  id                  Int      @id @default(autoincrement())
+  question            String
+  questionHistory     String[]
+  tags                String?
+  linkedPapers        Int[]
+  linkedClaims        Int[]
+  linkedTopics        Int[]
+  linkedDocuments     Int[]
+  linkedSnippets      Int[]
+  includedInDocuments Int[]
+  roamPage            String?
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+}
+
+model Claim {
+  id                  Int      @id @default(autoincrement())
+  claim               String
+  claimHistory        String[]
+  tags                String?
+  linkedPapers        Int[]
+  linkedQuestions     Int[]
+  linkedTopics        Int[]
+  linkedDocuments     Int[]
+  linkedSnippets      Int[]
+  includedInDocuments Int[]
+  roamPage            String?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Topic {
+  id                  Int      @id @default(autoincrement())
+  topic               String
+  topicHistory        String[]
+  tags                String?
+  linkedPapers        Int[]
+  linkedQuestions     Int[]
+  linkedClaims        Int[]
+  linkedDocuments     Int[]
+  linkedSnippets      Int[]
+  includedInDocuments Int[]
+  roamPage            String?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Document {
+  id                  Int      @id @default(autoincrement())
+  documentText        String
+  documentTextHistory String[]
+  documentContents    Int[]
+  tags                String?
+  linkedPapers        Int[]
+  linkedQuestions     Int[]
+  linkedClaims        Int[]
+  linkedTopics        Int[]
+  linkedSnippets      Int[]
+  includedInDocuments Int[]
+  roamPage            String?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Snippet {
+  id                  Int      @id @default(autoincrement())
+  snippet             String
+  snippetHistory      String[]
+  tags                String?
+  linkedPapers        Int[]
+  linkedQuestions     Int[]
+  linkedClaims        Int[]
+  linkedTopics        Int[]
+  linkedDocuments     Int[]
+  includedInDocuments Int[]
+  roamPage            String?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Author {
+  id                    Int      @id @default(autoincrement())
+  name                  String
+  tags                  String[]
+  institutions          String[]
+  links                 String[]
+  papers                Int[]
+  claims                Int[]
+  topics                Int[]
+  documents             Int[]
+  referencedInDocuments Int[]
+  notes                 String[]
+}
