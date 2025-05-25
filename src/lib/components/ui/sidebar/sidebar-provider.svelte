@@ -1,5 +1,5 @@
 <script lang="ts">
-	import * as Tooltip from '$lib/components/ui/tooltip/index.js'
+       import * as Tooltip from '$lib/components/ui/tooltip'
 	import { cn } from '$lib/utils.js'
 	import type { WithElementRef } from 'bits-ui'
 	import type { HTMLAttributes } from 'svelte/elements'
@@ -9,7 +9,7 @@
 		SIDEBAR_WIDTH,
 		SIDEBAR_WIDTH_ICON,
 	} from './constants.js'
-	import { setSidebar } from './context.svelte.js'
+       import { setSidebar } from './context.svelte'
 
 	let {
 		ref = $bindable(null),
