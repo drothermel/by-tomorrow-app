@@ -18,6 +18,10 @@
 	}
 	let { block }: Props = $props()
 
+	/**
+	 * Determine the CSS grid layout for the toolbar depending on whether
+	 * the block has children or is in markdown preview mode.
+	 */
 	function getGridColsCSS() {
 		if (
 			block.children.length > 0 ||

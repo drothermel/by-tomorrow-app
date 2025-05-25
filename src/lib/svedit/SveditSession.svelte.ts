@@ -6,12 +6,21 @@ import type {
 } from '$lib/svedit/types'
 import type BlockData from '$lib/svedit/BlockData.svelte'
 
+/**
+ * Manages editor state including the root block and undo/redo history. All
+ * modifications to blocks are funneled through this class so that history can
+ * be tracked.
+ */
 export default class SveditSession {
 	sveditSessionState: SveditStateData = $state() as SveditStateData
 	pendingHistory: SveditStateData | null = $state(null)
 	history: SveditStateData[] = $state([])
 	future: SveditStateData[] = $state([])
 
+	/**
+	 * Create a new editing session around the provided root block. The root
+	 * block is linked to this session and has its parent cleared.
+	 */
 	constructor(rootBlock: BlockData) {
 		this.sveditSessionState = {
 			rootBlock: rootBlock,
@@ -22,20 +31,30 @@ export default class SveditSession {
 		)
 	}
 
+	/** The root {@link BlockData} being edited. */
 	get rootBlock(): BlockData {
 		return this.sveditSessionState.rootBlock
 	}
 
+	/**
+	 * Capture the current state so it can be pushed onto the history stack
+	 * later. This is invoked before a mutating operation.
+	 */
 	takeStateSnapshot(): void {
 		this.pendingHistory = structuredClone(
 			$state.snapshot(this.sveditSessionState)
 		) as SveditStateData
 	}
 
+	/** Discard the pending snapshot created by {@link takeStateSnapshot}. */
 	clearStateSnapshot(): void {
 		this.pendingHistory = null
 	}
 
+	/**
+	 * Commit the pending snapshot to the history stack. If no snapshot has
+	 * been taken this method logs an error.
+	 */
 	finalizePendingHistory(): void {
 		if (this.pendingHistory !== null) {
 			this.history = [...this.history, this.pendingHistory]
@@ -45,6 +64,9 @@ export default class SveditSession {
 		}
 	}
 
+	/**
+	 * Retrieve a block using a path relative to the root block.
+	 */
 	getElemByPath(path: Path = []): BlockData | undefined {
 		if (path === null) {
 			return undefined
@@ -60,6 +82,10 @@ export default class SveditSession {
 		return currBlock
 	}
 
+	/**
+	 * Determine whether a property or array index can be set on the provided
+	 * element.
+	 */
 	canSetKey(elem: any, newKey: PathIndex): boolean {
 		if (elem === undefined || elem === null) return false
 
@@ -77,6 +103,11 @@ export default class SveditSession {
 		return false
 	}
 
+	/**
+	 * Set a value on an element reached via the given path. Returns a status
+	 * object indicating success or failure and records the update in the
+	 * session history.
+	 */
 	setElemByPath(path: Path, newKey: PathIndex, value: any): SetPathStatus {
 		if (path === null) {
 			return {

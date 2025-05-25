@@ -9,6 +9,11 @@ import type {
 import { marked } from 'marked'
 import type SveditSession from '$lib/svedit/SveditSession.svelte'
 
+/**
+ * Represents a single editable block within the editor. Blocks form a tree
+ * structure with a root node having no parent. Each block keeps track of its
+ * children, display attributes and the editing session it belongs to.
+ */
 export default class BlockData {
 	// Definition
 	type: BlockType = $state('unknown')
@@ -40,6 +45,10 @@ export default class BlockData {
 	parent: BlockData | null = $state(null)
 	session: SveditSession | null = $state(null)
 
+	/**
+	 * Create a new block instance. If markdown content is provided the block
+	 * defaults to preview mode.
+	 */
 	constructor({
 		type,
 		markdown,
@@ -95,18 +104,31 @@ export default class BlockData {
 		}
 	}
 
+	/**
+	 * Human readable name used primarily for debugging. Combines the block
+	 * type with its UUID.
+	 */
 	get name(): string {
 		return `${this.type}-${this.uuid}`
 	}
 
+	/**
+	 * Returns a string describing the block and its parent. Useful when
+	 * printing to logs.
+	 */
 	get repStr(): string {
 		return `${this.editable ? 'editable' : 'fixed'} ${this.type} ${this.name} Parent: ${this.parent?.name}`
 	}
 
+	/** Render the markdown field into HTML. */
 	get renderedMarkdown(): string {
 		return marked.parse(this.markdown) as string
 	}
 
+	/**
+	 * Change the block's type and record the update in the session history.
+	 * Switching to markdown automatically enables the editor preview.
+	 */
 	setType(newType: BlockType): void {
 		this.session?.takeStateSnapshot()
 		this.type = newType
@@ -116,6 +138,10 @@ export default class BlockData {
 		this.session?.finalizePendingHistory()
 	}
 
+	/**
+	 * Compute the block's path from the root by walking up its parents. The
+	 * root block returns an empty path.
+	 */
 	get path(): Path {
 		// The root node has no path, its the parent
 		if (this.parent === null) {
@@ -137,6 +163,9 @@ export default class BlockData {
 		return path.reverse()
 	}
 
+	/**
+	 * Recursively assign the given session to this block and all children.
+	 */
 	setSessionOnChildren(mySession: SveditSession): void {
 		this.session = mySession
 		for (const child of this.children) {
@@ -144,6 +173,10 @@ export default class BlockData {
 		}
 	}
 
+	/**
+	 * Set the parent reference on this block and propagate it to all
+	 * descendant blocks.
+	 */
 	setParentOnChildren(myParent: BlockData | null): void {
 		this.parent = myParent
 		for (const child of this.children) {
@@ -151,18 +184,25 @@ export default class BlockData {
 		}
 	}
 
+	/** Append a new empty child block at the end of the children array. */
 	addChildBlock(): void {
 		this.addChildBlockAtIndex(this.children.length)
 	}
 
-	// All actual removal logic happens here
+	/**
+	 * Remove a child by UUID and record the modification in the session
+	 * history.
+	 */
 	removeChildBlock(uuid: string): void {
 		this.session?.takeStateSnapshot()
 		this.children = this.children.filter((child) => child.uuid !== uuid)
 		this.session?.finalizePendingHistory()
 	}
 
-	// All actual adding logic happens here
+	/**
+	 * Insert a new empty block at the specified index. A RangeError is thrown
+	 * if the index is outside the children array bounds.
+	 */
 	addChildBlockAtIndex(index: number): void {
 		if (index < 0 || index > this.children.length) {
 			throw new RangeError(
@@ -180,7 +220,7 @@ export default class BlockData {
 		this.session?.finalizePendingHistory()
 	}
 
-	// Helper function that wraps adding/removing functionality
+	/** Remove this block from its parent. */
 	removeSelfFromParent(): void {
 		if (this.parent === null) {
 			throw TypeError('Expected parent to be non-null')
@@ -193,7 +233,7 @@ export default class BlockData {
 		this.parent.removeChildBlock(this.uuid)
 	}
 
-	// Helper function that wraps adding/removing functionality
+	/** Insert a new block before this one in the parent's children array. */
 	addBlockAbove(): void {
 		// Cannot add block above root node
 		if (this.parent === null) {
@@ -207,7 +247,7 @@ export default class BlockData {
 		return this.parent.addChildBlockAtIndex(this.parent.children.indexOf(this))
 	}
 
-	// Helper function that wraps adding/removing functionality
+	/** Insert a new block after this one in the parent's children array. */
 	addBlockBelow(): void {
 		// Cannot add block below root node
 		if (this.parent === null) {
