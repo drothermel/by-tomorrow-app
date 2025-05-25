@@ -1,11 +1,11 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte'
 	import * as mupdf from 'mupdf'
 	import logger from '$lib/logger'
 
 	export let pdfUrl = ''
 
-	let canvas
+       let canvas: HTMLCanvasElement
 	let error = ''
 
 	onMount(async () => {
@@ -35,10 +35,12 @@
 			)
 
 			// Draw the image data onto the canvas
-			const context = canvas.getContext('2d')
-			canvas.width = pixmap.width
-			canvas.height = pixmap.height
-			context.putImageData(imageData, 0, 0)
+                       const context = canvas.getContext('2d')
+                       if (context) {
+                               canvas.width = pixmap.width
+                               canvas.height = pixmap.height
+                               context.putImageData(imageData, 0, 0)
+                       }
 		} catch (err) {
 			error = 'Failed to load PDF.'
 			logger.error(err)

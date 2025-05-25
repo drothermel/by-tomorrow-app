@@ -9,15 +9,15 @@ import { db } from '$lib/database'
 import logger from '$lib/logger'
 
 export const load = async () => {
-	// Fetch all arxivId values from the database
-	const papers = await db.paperMetadataLibrary.findMany({
-		select: {
-			arxivId: true,
-		},
-	})
+        // Fetch all arxivId values from the database
+        const papers: { arxivId: string }[] = await db.paperMetadataLibrary.findMany({
+                select: {
+                        arxivId: true,
+                },
+        })
 
 	// Extract arxivId values into an array
-	const arxivIds = papers.map((paper) => paper.arxivId)
+        const arxivIds = papers.map((paper: { arxivId: string }) => paper.arxivId)
 
 	// Return the arxivIds to be available in the page's data
 	return {

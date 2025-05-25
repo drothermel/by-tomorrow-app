@@ -11,7 +11,7 @@
 		if (!input) {
 			return ''
 		}
-		return input.toLowerCase().replace(/\b\w/g, (s) => s.toUpperCase())
+               return input.toLowerCase().replace(/\b\w/g, (s: string) => s.toUpperCase())
 	}
 	function getBreadcrumbName() {
 		if ($page.url.pathname === '/') {

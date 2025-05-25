@@ -6,23 +6,27 @@
 	import FileUp from 'lucide-svelte/icons/file-up'
 	import logger from '$lib/logger'
 
-	class FileLoadDialogProps {
-		input?: HTMLInputElement = $state()
-		selected: File | null = $state(null)
-		pdfContent = $state(null)
+       class FileLoadDialogProps {
+               input?: HTMLInputElement = $state()
+               selected: File | null = $state(null)
+               pdfContent: string | null = $state(null)
 
-		readPdf(file) {
-			const reader = new FileReader()
-			reader.onload = (event) => {
-				this.pdfContent = event.target.result // Data URL
-			}
-			reader.readAsDataURL(file)
-		}
+               readPdf(file: File) {
+                       const reader = new FileReader()
+                       reader.onload = (event: ProgressEvent<FileReader>) => {
+                               const result = (event.target as FileReader | null)?.result
+                               if (typeof result === 'string') {
+                                       this.pdfContent = result
+                               }
+                       }
+                       reader.readAsDataURL(file)
+               }
 
-		handle_input_change(event: Event) {
-			logger.log('File change!')
-			const input = event.target as HTMLInputElement
-			if (input.files && input.files.length > 0) {
+               handle_input_change(event: Event) {
+                       logger.log('File change!')
+                       const input = event.target as HTMLInputElement | null
+                       if (!input) return
+                       if (input.files && input.files.length > 0) {
 				const file = input.files[0]
 				if (file.type === 'application/pdf') {
 					this.selected = file
