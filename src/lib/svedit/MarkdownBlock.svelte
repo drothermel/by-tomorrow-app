@@ -1,4 +1,8 @@
 <script lang="ts">
+	/**
+	 * Display and edit markdown content. When in dual mode the component
+	 * shows both the editor and a live preview.
+	 */
 	// Import markdown conversion library
 	import type BlockData from '$lib/svedit/BlockData.svelte'
 	import { Textarea } from '$lib/components/ui/textarea/index'
