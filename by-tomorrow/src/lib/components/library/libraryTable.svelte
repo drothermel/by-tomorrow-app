@@ -1,8 +1,8 @@
 <script lang="ts">
 	import * as Table from '$lib/components/ui/table/index'
-import { Badge } from '$lib/components/ui/badge/index'
-import { Checkbox } from '$lib/components/ui/checkbox/index'
-import logger from '$lib/logger'
+	import { Badge } from '$lib/components/ui/badge/index'
+	import { Checkbox } from '$lib/components/ui/checkbox/index'
+	import logger from '$lib/logger'
 
 	export type TableData = {
 		id: string
@@ -34,8 +34,8 @@ import logger from '$lib/logger'
 		return selectedRows.length === allIds.length
 	}
 
-       function toggleRowSelected(id: string): void {
-               logger.log('Selected toggle: ', id)
+	function toggleRowSelected(id: string): void {
+		logger.log('Selected toggle: ', id)
 		if (isSelected(id)) {
 			selectedRows = selectedRows.filter((rowId) => rowId !== id)
 		} else {
@@ -52,9 +52,9 @@ import logger from '$lib/logger'
 		onRowsSelected(selectedRows)
 	}
 
-       $effect(() => {
-               logger.log('Selected:', $state.snapshot(selectedRows))
-       })
+	$effect(() => {
+		logger.log('Selected:', $state.snapshot(selectedRows))
+	})
 </script>
 
 <Label for="tagFilter" class="font-semibold">

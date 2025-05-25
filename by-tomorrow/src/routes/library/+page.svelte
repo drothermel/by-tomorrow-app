@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation'
-import LibraryTable from '$lib/components/library/libraryTable.svelte'
-import Button from '$lib/components/ui/button/button.svelte'
-import logger from '$lib/logger'
+	import LibraryTable from '$lib/components/library/libraryTable.svelte'
+	import Button from '$lib/components/ui/button/button.svelte'
+	import logger from '$lib/logger'
 
 	let { data }: { data: LibraryPageData } = $props()
 
@@ -71,21 +71,21 @@ import logger from '$lib/logger'
 			body: formData,
 		})
 		const result = await response.json()
-               const resultJson = JSON.parse(result.data)
-               logger.log('Result:', resultJson)
-               if (resultJson[0].success) {
-                       logger.log('Data removed successfully')
-                       library = library.filter((row) => !selected.includes(row[8]))
-               } else {
-                       logger.error('Error:', result.error)
-               }
-               logger.log($state.snapshot(library))
-       }
+		const resultJson = JSON.parse(result.data)
+		logger.log('Result:', resultJson)
+		if (resultJson[0].success) {
+			logger.log('Data removed successfully')
+			library = library.filter((row) => !selected.includes(row[8]))
+		} else {
+			logger.error('Error:', result.error)
+		}
+		logger.log($state.snapshot(library))
+	}
 
 	$effect(() => {
-               logger.log('InitLibrary:', $state.snapshot(initLibrary))
-               logger.log('Library:', $state.snapshot(library))
-       })
+		logger.log('InitLibrary:', $state.snapshot(initLibrary))
+		logger.log('Library:', $state.snapshot(library))
+	})
 </script>
 
 <div class="flex flex-col gap-4">
