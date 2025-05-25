@@ -60,3 +60,6 @@ There are currently no automated tests for this project.
 - Rich-text editor built with Svedit
 - Upcoming: login flow and file manager
 
+## License
+
+This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License. See the [LICENSE](LICENSE) file for details.
