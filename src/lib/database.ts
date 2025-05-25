@@ -1,5 +1,6 @@
 import pkg from '@prisma/client'
 const { PrismaClient } = pkg
+import type { Prisma } from '@prisma/client'
 
 export const db = new PrismaClient()
 
@@ -69,8 +70,10 @@ export async function addPaperMetadata(input: PaperMetadataInput) {
 	}
 }
 
-export async function upsertPapersInTransaction(papers: PaperMetadataInput[]) {
-	await db.$transaction(async (prisma) => {
+export async function upsertPapersInTransaction(
+       papers: PaperMetadataInput[]
+): Promise<void> {
+       await db.$transaction(async (prisma: Prisma.TransactionClient) => {
 		for (const paper of papers) {
 			const existingPaper = await prisma.paperMetadataLibrary.findUnique({
 				where: { arxivId: paper.arxivId },

@@ -16,6 +16,20 @@ By Tomorrow is a SvelteKit application for organizing research papers. It lets y
    ```
    The app will be available at `http://localhost:5173` by default.
 
+### PDF viewer dependency
+
+The `pdfViewer` component expects a module named `mupdf`. A simple type
+declaration is included at `src/mupdf.d.ts` so the code compiles even when the
+package is missing. To use the real library, install it with your package
+manager:
+
+```bash
+pnpm add mupdf
+```
+
+After installing the module you can delete `src/mupdf.d.ts` since the explicit
+type declaration is no longer required.
+
 ## Database
 
 The app uses Prisma with a PostgreSQL database. Copy `.env.example` to `.env` and adjust `DATABASE_URL` if needed. To run a local database in Docker and apply schema migrations:

@@ -8,7 +8,7 @@
 <Card.Root class="w-full relative">
 	<Card.Header>
 		<div class="flex flex-row">
-			<Card.Title tag="h3" class="text-xl font-bold">{title}</Card.Title>
+               <Card.Title class="text-xl font-bold" level={3}>{title}</Card.Title>
 		</div>
 		<Card.Description class="flex flex-col gap-1">
 			Created: {time.toLocaleString()}

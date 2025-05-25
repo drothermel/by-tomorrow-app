@@ -4,7 +4,19 @@
 	import Button from '$lib/components/ui/button/button.svelte'
 	import logger from '$lib/logger'
 
-	let { data } = $props()
+       let { data } = $props()
+
+       type PaperRecord = {
+               tags?: string | null
+               title: string
+               authors: string
+               published: Date
+               updated: Date
+               primaryCategory: string
+               categories: string
+               comments?: string | null
+               pdfLink: string
+       }
 
 	const headers = [
 		'Tags',
@@ -17,7 +29,7 @@
 		'Comments',
 		'Link',
 	]
-	let initLibrary: string[][] = data.papers.map((paper) => [
+       let initLibrary: string[][] = data.papers.map((paper: PaperRecord) => [
 		paper.tags ?? '',
 		paper.title,
 		paper.authors,

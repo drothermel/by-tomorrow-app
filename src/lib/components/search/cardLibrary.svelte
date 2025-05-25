@@ -10,9 +10,9 @@
 	import { X } from 'lucide-svelte'
 	import logger from '$lib/logger'
 
-	import type { ArxivMetadataList, ArxivQuery } from './../schemas.ts'
-	import PaperCard from '$lib/components/cards/paperCard.svelte'
-	import Button from './ui/button/button.svelte'
+       import type { ArxivMetadataList, ArxivQuery, ArxivMetadata } from '../../schemas'
+       import PaperCard from '$lib/components/cards/paperCard.svelte'
+       import Button from '../ui/button/button.svelte'
 	let {
 		data,
 		query,
@@ -47,7 +47,7 @@
 		logger.log('   used tags:', $tags)
 
 		// Get the data associated with the selected elements
-		let selectedData = data.filter((m) => selected.has(m.id))
+               let selectedData = data.filter((m: ArxivMetadata) => selected.has(m.id))
 		logger.log(selectedData)
 
 		// Make the form data request
@@ -153,7 +153,7 @@
 									<X class="size-3" />
 								</button>
 								<span class="text-sm leading-snug">
-									{data.find((m) => m.id === id)?.title}
+                                                                       {data.find((m: ArxivMetadata) => m.id === id)?.title}
 								</span>
 							</div>
 						{/each}
