@@ -1,38 +1,47 @@
-# sv
+# By Tomorrow - Research Paper Management App
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+By Tomorrow is a SvelteKit application for organizing research papers. It lets you search [arXiv](https://arxiv.org), tag papers, and maintain a library for easy reference. The project also includes a custom document editor and PDF viewer to help manage reading notes.
 
-## Creating a project
+## Development setup
 
-If you're seeing this, you've probably already done this step. Congrats!
+1. Install dependencies with your preferred package manager (npm or pnpm):
+   ```bash
+   pnpm install
+   # or
+   npm install
+   ```
+2. Start the development server:
+   ```bash
+   npm run dev
+   ```
+   The app will be available at `http://localhost:5173` by default.
 
-```bash
-# create a new project in the current directory
-npx sv create
+## Database
 
-# create a new project in my-app
-npx sv create my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
+The app uses Prisma with a PostgreSQL database. Copy `.env.example` to `.env` and adjust `DATABASE_URL` if needed. To run a local database in Docker and apply schema migrations:
 
 ```bash
-npm run build
+# start the Postgres container
+npm run db:start
+
+# apply Prisma migrations (interactive)
+npm run db:migrate
 ```
 
-You can preview the production build with `npm run preview`.
+You can open Prisma Studio to explore the data:
+```bash
+npm run db:studio
+```
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+## Running tests
+
+There are currently no automated tests for this project.
+
+## Roadmap
+
+- Search arXiv and save metadata with custom tags
+- View your paper library and remove entries
+- PDF viewer with editable URL input
+- Rich-text editor built with Svedit
+- Upcoming: login flow and file manager
+
