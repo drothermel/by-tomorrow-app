@@ -4,13 +4,16 @@ By Tomorrow is a SvelteKit application for organizing research papers. It lets y
 
 ## Development setup
 
-1. Install dependencies with your preferred package manager (npm or pnpm):
+1. Copy `.env.example` to `.env` and adjust the values as needed. The file
+   defines environment variables such as `DATABASE_URL` for Prisma and
+   `VITE_ENABLE_LOGGING` to control console output.
+2. Install dependencies with your preferred package manager (npm or pnpm):
    ```bash
    pnpm install
    # or
    npm install
    ```
-2. Start the development server:
+3. Start the development server:
    ```bash
    npm run dev
    ```
@@ -32,7 +35,10 @@ type declaration is no longer required.
 
 ## Database
 
-The app uses Prisma with a SQLite database. Copy `.env.example` to `.env` to set `DATABASE_URL`, then initialize the database with:
+The app uses Prisma with a SQLite database. Copy `.env.example` to `.env` and edit
+the variables as needed. `DATABASE_URL` configures the database connection and
+`VITE_ENABLE_LOGGING` can be set to `false` to silence console logs. After
+configuring your environment, initialize the database with:
 ```
 npm run db:push
 ```
