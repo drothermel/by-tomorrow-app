@@ -3,9 +3,9 @@
 
 	import { createTagsInput, melt } from '@melt-ui/svelte'
 
-	import { Label } from '$lib/components/ui/label/index.js'
+       import { Label } from '$lib/components/ui/label'
 	import * as Dialog from '$lib/components/ui/dialog'
-	import { Separator } from '$lib/components/ui/separator/index.js'
+       import { Separator } from '$lib/components/ui/separator'
 
 	import { X } from 'lucide-svelte'
 	import logger from '$lib/logger'
