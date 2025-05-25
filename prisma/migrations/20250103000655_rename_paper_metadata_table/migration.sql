@@ -1,5 +1,14 @@
+/*
+  Warnings:
+
+  - You are about to drop the `PaperMetadataLibrary` table. If the table is not empty, all the data it contains will be lost.
+
+*/
+-- DropTable
+DROP TABLE "PaperMetadataLibrary";
+
 -- CreateTable
-CREATE TABLE "PaperMetadataLibrary" (
+CREATE TABLE "PaperMetadata" (
     "id" SERIAL NOT NULL,
     "arxivId" TEXT NOT NULL,
     "published" TIMESTAMP(3) NOT NULL,
@@ -16,8 +25,8 @@ CREATE TABLE "PaperMetadataLibrary" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "PaperMetadataLibrary_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "PaperMetadata_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "PaperMetadataLibrary_arxivId_key" ON "PaperMetadataLibrary"("arxivId");
+CREATE UNIQUE INDEX "PaperMetadata_arxivId_key" ON "PaperMetadata"("arxivId");
