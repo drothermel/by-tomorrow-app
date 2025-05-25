@@ -4,7 +4,19 @@
 	import Button from '$lib/components/ui/button/button.svelte'
 	import logger from '$lib/logger'
 
-	let { data }: { data: LibraryPageData } = $props()
+       let { data } = $props()
+
+       type PaperRecord = {
+               tags?: string | null
+               title: string
+               authors: string
+               published: Date
+               updated: Date
+               primaryCategory: string
+               categories: string
+               comments?: string | null
+               pdfLink: string
+       }
 
 	const headers = [
 		'Tags',
@@ -17,26 +29,17 @@
 		'Comments',
 		'Link',
 	]
-	function convertPaperMetadataToTableData(
-		paperMetadata: PaperMetadata[]
-	): TableData[] {
-		return paperMetadata.map((paper) => {
-			return {
-				id: paper.arxivId,
-				data: [
-					paper.tags ?? '',
-					paper.title,
-					paper.authors,
-					new Date(paper.published).toLocaleDateString(),
-					new Date(paper.updated).toLocaleDateString(),
-					paper.primaryCategory,
-					paper.categories,
-					paper.comments ?? '',
-					paper.pdfLink,
-				],
-			}
-		})
-	}
+       let initLibrary: string[][] = data.papers.map((paper: PaperRecord) => [
+		paper.tags ?? '',
+		paper.title,
+		paper.authors,
+		new Date(paper.published).toLocaleDateString(),
+		new Date(paper.updated).toLocaleDateString(),
+		paper.primaryCategory,
+		paper.categories,
+		paper.comments ?? '',
+		paper.pdfLink,
+	])
 
 	// Initialize library with the +page.server.ts load function
 	let library: TableData[] = $state(

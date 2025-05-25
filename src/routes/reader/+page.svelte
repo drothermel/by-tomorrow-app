@@ -49,38 +49,11 @@
   const paperData = $derived(paperDataStr ? JSON.parse(paperDataStr) : {});
 </script>
 
-<div class="container items-center justify-center mx-auto p-4 w-full">
-  <div class="flex flex-row justify-between gap-2 mb-2">
-    <Input bind:value={paperURL.value} placeholder="Search Paper Arxiv URL" />
-    <Button
-      onclick={() => {
-        queryPage();
-      }}>Query Paper</Button
-    >
-    <Button
-      onclick={() => {
-        fetchExample();
-      }}>Test Paper</Button
-    >
-  </div>
-  {#if paperDataStr}
-    <div class="prose flex flex-col gap-2 p-4 max-w-6xl mx-auto">
-      <h1 class="my-2">{paperData.title}</h1>
-      <p class="font-semibold text-sm my-2">{paperData.authors.join(', ')}</p>
-      <p class="text-tighter text-sm my-2">{paperData.abstract}</p>
-      <p class="text-tighter text-sm my-2">
-        <span class="font-bold">Keywords:</span>{' ' +
-          paperData.keywords.join(', ')}j
-      </p>
-      <Separator />
-      <div>
-        <ArxivSection
-          section={paperData.content}
-          bib={paperData.bibliography}
-        />
-      </div>
-    </div>
-  {:else}
-    <p>Loading...</p>
-  {/if}
+<div class="container mx-auto p-4">
+	<h1 class="text-2xl font-bold mb-4">PDF Viewer</h1>
+	<div class="flex flex-row gap-2">
+		<Label for="pdfurl">PDF Link:</Label>
+		<Input bind:value={pdfUrl} id="pdfurl" placeholder="Enter link to pdf" />
+	</div>
+       <iframe src={pdfUrl} class="pdf-container min-h-screen" title="PDF"></iframe>
 </div>
