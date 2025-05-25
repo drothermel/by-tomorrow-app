@@ -32,14 +32,9 @@ type declaration is no longer required.
 
 ## Database
 
-The app uses Prisma with a PostgreSQL database. Copy `.env.example` to `.env` and adjust `DATABASE_URL` if needed. To run a local database in Docker and apply schema migrations:
-
-```bash
-# start the Postgres container
-npm run db:start
-
-# apply Prisma migrations (interactive)
-npm run db:migrate
+The app uses Prisma with a SQLite database. Copy `.env.example` to `.env` to set `DATABASE_URL`, then initialize the database with:
+```
+npm run db:push
 ```
 
 You can open Prisma Studio to explore the data:

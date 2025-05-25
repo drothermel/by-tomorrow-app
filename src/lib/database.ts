@@ -1,8 +1,19 @@
-import pkg from '@prisma/client'
-const { PrismaClient } = pkg
-import type { Prisma } from '@prisma/client'
+import { PrismaClient, type Prisma } from '@prisma/client'
+import { dev } from '$app/environment'
 
-export const db = new PrismaClient()
+let prisma: PrismaClient
+if (dev) {
+       // Avoid creating new instances during hot reload
+       const globalWithPrisma = globalThis as typeof globalThis & {
+               prisma?: PrismaClient
+       }
+       prisma = globalWithPrisma.prisma || new PrismaClient()
+       globalWithPrisma.prisma = prisma
+} else {
+       prisma = new PrismaClient()
+}
+
+export const db = prisma
 
 export type PaperMetadataInput = {
 	arxivId: string
