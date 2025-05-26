@@ -1,5 +1,6 @@
-import { PrismaClient, type Prisma } from '@prisma/client'
+import { PrismaClient, type Prisma, type PaperMetadata } from '@prisma/client'
 import { dev } from '$app/environment'
+import logger from '$lib/logger'
 
 let prisma: PrismaClient
 if (dev) {
@@ -94,10 +95,10 @@ export async function addPaperMetadata(input: PaperMetadataInput) {
  * updated and new ones are created.
  */
 export async function upsertPapersInTransaction(
-	papers: PaperMetadataInput[]
+        papers: PaperMetadataInput[]
 ): Promise<void> {
-	await db.$transaction(async (prisma: Prisma.TransactionClient) => {
-		for (const paper of papers) {
+        await db.$transaction(async (prisma: Prisma.TransactionClient) => {
+                for (const paper of papers) {
 			const existingPaper = await prisma.paperMetadata.findUnique({
 				where: { arxivId: paper.arxivId },
 			})
@@ -134,9 +135,38 @@ export async function upsertPapersInTransaction(
 						primaryCategory: paper.primaryCategory,
 						comments: paper.comments,
 						tags: paper.tags,
-					},
-				})
-			}
-		}
-	})
+                                        },
+                                })
+                        }
+                }
+        })
+}
+
+/**
+ * Merge and insert an array of PaperMetadata records.
+ */
+export async function mergeInsertData(
+        data: PaperMetadata[]
+): Promise<{ success: boolean; error?: string }> {
+        try {
+                const inputs: PaperMetadataInput[] = data.map((p) => ({
+                        arxivId: p.arxivId,
+                        published: p.published,
+                        updated: p.updated,
+                        title: p.title,
+                        abstract: p.abstract,
+                        authors: p.authors,
+                        absLink: p.absLink,
+                        pdfLink: p.pdfLink,
+                        categories: p.categories,
+                        primaryCategory: p.primaryCategory,
+                        comments: p.comments ?? undefined,
+                        tags: p.tags ?? undefined,
+                }))
+                await upsertPapersInTransaction(inputs)
+                return { success: true }
+        } catch (error) {
+                logger.error('Error merging insert data:', error)
+                return { success: false, error: (error as Error).message }
+        }
 }

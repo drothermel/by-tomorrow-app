@@ -1,0 +1,13 @@
+{
+	"/": [],
+	"/editor": [],
+	"/files": [],
+	"/library": [
+		"src/routes/library/+page.server.ts"
+	],
+	"/login": [],
+	"/reader": [],
+	"/search": [
+		"src/routes/search/+page.server.ts"
+	]
+}
