@@ -3,7 +3,7 @@ import logger from '$lib/logger'
 
 export const load = async () => {
 	// Fetch all arxivId values from the database
-	const papers = await db.paperMetadataLibrary.findMany()
+	const papers = await db.paperMetadata.findMany()
 
 	// Return the arxivIds to be available in the page's data
 	return { papers }
@@ -20,7 +20,7 @@ export const actions = {
 				logger.log('To Remove:', toRemove)
 
 				if (Array.isArray(arxivIds) && arxivIds.length > 0) {
-					const result = await db.paperMetadataLibrary.deleteMany({
+					const result = await db.paperMetadata.deleteMany({
 						where: {
 							arxivId: {
 								in: arxivIds,
