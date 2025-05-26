@@ -17,6 +17,9 @@ const Schema: z.ZodType<Prisma.PaperMetadataMaxAggregateInputType> = z
 		primaryCategory: z.literal(true).optional(),
 		comments: z.literal(true).optional(),
 		tags: z.literal(true).optional(),
+		roamPage: z.literal(true).optional(),
+		read: z.literal(true).optional(),
+		paperDataViewParams: z.literal(true).optional(),
 		created_at: z.literal(true).optional(),
 		updated_at: z.literal(true).optional(),
 	})

@@ -1,22 +1,24 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation'
-	import LibraryTable from '$lib/components/library/libraryTable.svelte'
+	import LibraryTable, {
+		type TableData,
+	} from '$lib/components/library/libraryTable.svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import logger from '$lib/logger'
 
-       let { data } = $props()
+	let { data } = $props()
 
-       type PaperRecord = {
-               tags?: string | null
-               title: string
-               authors: string
-               published: Date
-               updated: Date
-               primaryCategory: string
-               categories: string
-               comments?: string | null
-               pdfLink: string
-       }
+	type PaperRecord = {
+		tags?: string | null
+		title: string
+		authors: string
+		published: Date
+		updated: Date
+		primaryCategory: string
+		categories: string
+		comments?: string | null
+		pdfLink: string
+	}
 
 	const headers = [
 		'Tags',
@@ -29,7 +31,24 @@
 		'Comments',
 		'Link',
 	]
-       let initLibrary: string[][] = data.papers.map((paper: PaperRecord) => [
+	function convertPaperMetadataToTableData(papers: PaperRecord[]): TableData[] {
+		return papers.map((paper) => ({
+			id: paper.pdfLink,
+			data: [
+				paper.tags ?? '',
+				paper.title,
+				paper.authors,
+				new Date(paper.published).toLocaleDateString(),
+				new Date(paper.updated).toLocaleDateString(),
+				paper.primaryCategory,
+				paper.categories,
+				paper.comments ?? '',
+				paper.pdfLink,
+			],
+		}))
+	}
+
+	let initLibrary: string[][] = data.papers.map((paper: PaperRecord) => [
 		paper.tags ?? '',
 		paper.title,
 		paper.authors,
@@ -78,12 +97,14 @@
 		logger.log('Result:', resultJson)
 		if (resultJson[0].success) {
 			logger.log('Data removed successfully')
-			library = library.filter((row) => !selected.includes(row[8]))
+			library = library.filter((row) => !selected.includes(row.id))
 		} else {
 			logger.error('Error:', result.error)
 		}
 		logger.log($state.snapshot(library))
 	}
+
+	const removeSelectedFromLibrary = removeSelected
 
 	$effect(() => {
 		logger.log('InitLibrary:', $state.snapshot(initLibrary))

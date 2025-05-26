@@ -11,7 +11,8 @@
 		"db:start": "docker compose up",
 		"db:push": "prisma db push",
 		"db:migrate": "prisma migrate dev",
-		"db:studio": "prisma studio"
+		"db:studio": "prisma studio",
+		"test": "node --test"
 	},
 	"devDependencies": {
 		"@melt-ui/pp": "^0.3.2",

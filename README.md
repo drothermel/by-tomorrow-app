@@ -11,10 +11,17 @@
    npm run db:push
    ```
 4. Launch the dev server:
+
    ```bash
    npm run dev
    ```
+
    Visit [http://localhost:5173](http://localhost:5173) to view the app.
+
+5. Run the test suite:
+   ```bash
+   npm test
+   ```
 
 More detailed setup instructions and component documentation live in the [`docs/`](docs/) directory.
 

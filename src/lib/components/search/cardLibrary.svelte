@@ -3,16 +3,20 @@
 
 	import { createTagsInput, melt } from '@melt-ui/svelte'
 
-       import { Label } from '$lib/components/ui/label'
+	import { Label } from '$lib/components/ui/label'
 	import * as Dialog from '$lib/components/ui/dialog'
-       import { Separator } from '$lib/components/ui/separator'
+	import { Separator } from '$lib/components/ui/separator'
 
 	import { X } from 'lucide-svelte'
 	import logger from '$lib/logger'
 
-       import type { ArxivMetadataList, ArxivQuery, ArxivMetadata } from '../../schemas'
-       import PaperCard from '$lib/components/cards/paperCard.svelte'
-       import Button from '../ui/button/button.svelte'
+	import type {
+		ArxivMetadataList,
+		ArxivQuery,
+		ArxivMetadata,
+	} from '../../schemas'
+	import PaperCard from '$lib/components/cards/paperCard.svelte'
+	import Button from '../ui/button/button.svelte'
 	let {
 		data,
 		query,
@@ -47,7 +51,7 @@
 		logger.log('   used tags:', $tags)
 
 		// Get the data associated with the selected elements
-               let selectedData = data.filter((m: ArxivMetadata) => selected.has(m.id))
+		let selectedData = data.filter((m: ArxivMetadata) => selected.has(m.id))
 		logger.log(selectedData)
 
 		// Try to add it to the library
@@ -74,16 +78,19 @@
 				return
 			}
 
-		const result = await response.json()
-		const resultJson = JSON.parse(result.data)
-		logger.log('Result:', resultJson)
-		if (resultJson[0].success) {
-			logger.log('Metadata added successfully!')
-			// Update the local state to match
-			library = new SvelteSet([...library, ...selected])
-			selected.clear()
-		} else {
-			logger.error('Error:', result.error)
+			const result = await response.json()
+			const resultJson = JSON.parse(result.data)
+			logger.log('Result:', resultJson)
+			if (resultJson[0].success) {
+				logger.log('Metadata added successfully!')
+				// Update the local state to match
+				library = new SvelteSet([...library, ...selected])
+				selected.clear()
+			} else {
+				logger.error('Error:', result.error)
+			}
+		} catch (err) {
+			console.error('Failed to save library:', err)
 		}
 	}
 </script>
@@ -167,7 +174,7 @@
 									<X class="size-3" />
 								</button>
 								<span class="text-sm leading-snug">
-                                                                       {data.find((m: ArxivMetadata) => m.id === id)?.title}
+									{data.find((m: ArxivMetadata) => m.id === id)?.title}
 								</span>
 							</div>
 						{/each}
