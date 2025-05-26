@@ -1,0 +1,29 @@
+import { z } from 'zod'
+import { DocumentOrderByWithRelationInputObjectSchema } from './objects/DocumentOrderByWithRelationInput.schema'
+import { DocumentWhereInputObjectSchema } from './objects/DocumentWhereInput.schema'
+import { DocumentWhereUniqueInputObjectSchema } from './objects/DocumentWhereUniqueInput.schema'
+import { DocumentCountAggregateInputObjectSchema } from './objects/DocumentCountAggregateInput.schema'
+import { DocumentMinAggregateInputObjectSchema } from './objects/DocumentMinAggregateInput.schema'
+import { DocumentMaxAggregateInputObjectSchema } from './objects/DocumentMaxAggregateInput.schema'
+import { DocumentAvgAggregateInputObjectSchema } from './objects/DocumentAvgAggregateInput.schema'
+import { DocumentSumAggregateInputObjectSchema } from './objects/DocumentSumAggregateInput.schema'
+
+export const DocumentAggregateSchema = z.object({
+	orderBy: z
+		.union([
+			DocumentOrderByWithRelationInputObjectSchema,
+			DocumentOrderByWithRelationInputObjectSchema.array(),
+		])
+		.optional(),
+	where: DocumentWhereInputObjectSchema.optional(),
+	cursor: DocumentWhereUniqueInputObjectSchema.optional(),
+	take: z.number().optional(),
+	skip: z.number().optional(),
+	_count: z
+		.union([z.literal(true), DocumentCountAggregateInputObjectSchema])
+		.optional(),
+	_min: DocumentMinAggregateInputObjectSchema.optional(),
+	_max: DocumentMaxAggregateInputObjectSchema.optional(),
+	_avg: DocumentAvgAggregateInputObjectSchema.optional(),
+	_sum: DocumentSumAggregateInputObjectSchema.optional(),
+})

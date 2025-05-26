@@ -1,9 +1,9 @@
-import fs from 'fs/promises';
-import path from 'path';
-import type { PageServerLoad } from './$types';
-import { parsePaperData } from '$lib/arxiv/arxivHtml.svelte';
-import { db } from '$lib/database';
-import logger from '$lib/logger';
+import fs from 'fs/promises'
+import path from 'path'
+import type { PageServerLoad } from './$types'
+import { parsePaperData } from '$lib/arxiv/arxivHtml.svelte'
+import { db } from '$lib/database'
+import logger from '$lib/logger'
 
 // export async function load({ fetch }) {
 //     const response = await fetch('https://arxiv.org/html/2403.01874'); // Replace with your URL
@@ -16,68 +16,69 @@ import logger from '$lib/logger';
 
 // Maybe sample a random paper url = arxiv id?
 export const load: PageServerLoad = async () => {
-    return {html: ''};
+	return { html: '' }
 }
 
 export const actions = {
-    testFile: async ({ request }) => {
-        const filePath = path.resolve('static', 'testPage.html');
-        try {
-            const htmlStr = await fs.readFile(filePath, 'utf-8');
-            let pageDataStr = JSON.stringify(parsePaperData(htmlStr));
-            return {success: true, pageDataStr }
-        } catch (error) {
-            logger.error('Error reading the HTML file:', error);
-            return {success: false}
-        }
-    },
-    query: async ({ request }) => {
-        const formData = await request.formData();
-        const url = formData.get('url');
+	testFile: async ({ request }) => {
+		const filePath = path.resolve('static', 'testPage.html')
+		try {
+			const htmlStr = await fs.readFile(filePath, 'utf-8')
+			let pageDataStr = JSON.stringify(parsePaperData(htmlStr))
+			return { success: true, pageDataStr }
+		} catch (error) {
+			logger.error('Error reading the HTML file:', error)
+			return { success: false }
+		}
+	},
+	query: async ({ request }) => {
+		const formData = await request.formData()
+		const url = formData.get('url')?.toString() || null
 
-        // Check if the url is already in the db
-        const existingPaper = await db.paperData.findUnique({
-            where: { arxivId: url },
-            select: { paperDataStr: true}
-        })
-        if (existingPaper) {
-            logger.log('Found existing paper in the db');
-            return { success: true, pageDataStr: existingPaper.paperDataStr }
-        }
+		// Check if the url is already in the db
+		const existingPaper = await db.paperData.findUnique({
+			where: { arxivId: url ?? undefined },
+			select: { paperDataStr: true },
+		})
+		if (existingPaper) {
+			logger.log('Found existing paper in the db')
+			return { success: true, pageDataStr: existingPaper.paperDataStr }
+		}
 
-        // If not, query arxiv
-        const htmlUrl = url?.replace('abs', 'html');
-        if (!htmlUrl) {
-            return {success: false};
-        }
+		// If not, query arxiv
+		const htmlUrl = url ? url.replace('abs', 'html') : null
+		if (!htmlUrl) {
+			return { success: false }
+		}
 
-        const response = await fetch(htmlUrl); // Replace with your URL
-        if (!response.ok) {
-            throw new Error(`Failed to fetch data: ${response.statusText}`);
-        }
-        const paperText = await response.text();
-        const pageDataStr = JSON.stringify(parsePaperData(paperText), null, 2);
-        logger.log('Parsed paper data');
+		const response = await fetch(htmlUrl) // Replace with your URL
+		if (!response.ok) {
+			throw new Error(`Failed to fetch data: ${response.statusText}`)
+		}
+		const paperText = await response.text()
+		const pageDataStr = JSON.stringify(parsePaperData(paperText), null, 2)
+		logger.log('Parsed paper data')
 
+		// Store page Data in the db
+		if (url) {
+			await db.paperData.create({
+				data: {
+					arxivId: url,
+					paperText: paperText,
+					paperDataStr: pageDataStr,
+				},
+			})
+		}
 
-        // Store page Data in the db
-        await db.paperData.create({
-            data: {
-                arxivId: url,
-                paperText: paperText,
-                paperDataStr: pageDataStr
-            }
-        });
+		logger.log('Stored in the db')
+		return { success: true, pageDataStr }
 
-        logger.log('Stored in the db')
-        return { success: true, pageDataStr };
-
-        // let pageDataStr = '';
-        // try {
-        //     pageDataStr = ' '
-        // } catch (error) {
-        //     console.error('Error reading the HTML file:', error);
-        // }
-        // return {success: true, pageDataStr }
-    },
-};
+		// let pageDataStr = '';
+		// try {
+		//     pageDataStr = ' '
+		// } catch (error) {
+		//     console.error('Error reading the HTML file:', error);
+		// }
+		// return {success: true, pageDataStr }
+	},
+}

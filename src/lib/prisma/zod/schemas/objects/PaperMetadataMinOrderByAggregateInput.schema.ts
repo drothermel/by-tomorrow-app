@@ -18,6 +18,9 @@ const Schema: z.ZodType<Prisma.PaperMetadataMinOrderByAggregateInput> = z
 		primaryCategory: z.lazy(() => SortOrderSchema).optional(),
 		comments: z.lazy(() => SortOrderSchema).optional(),
 		tags: z.lazy(() => SortOrderSchema).optional(),
+		roamPage: z.lazy(() => SortOrderSchema).optional(),
+		read: z.lazy(() => SortOrderSchema).optional(),
+		paperDataViewParams: z.lazy(() => SortOrderSchema).optional(),
 		created_at: z.lazy(() => SortOrderSchema).optional(),
 		updated_at: z.lazy(() => SortOrderSchema).optional(),
 	})

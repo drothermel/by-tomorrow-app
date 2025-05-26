@@ -1,10 +1,10 @@
 <script lang="ts">
-       import * as Sheet from '$lib/components/ui/sheet'
+	import * as Sheet from '$lib/components/ui/sheet'
 	import { cn } from '$lib/utils.js'
 	import type { WithElementRef } from 'bits-ui'
 	import type { HTMLAttributes } from 'svelte/elements'
 	import { SIDEBAR_WIDTH_MOBILE } from './constants.js'
-       import { useSidebar } from './context.svelte'
+	import { useSidebar } from './context.svelte'
 
 	let {
 		ref = $bindable(null),
@@ -36,7 +36,6 @@
 	</div>
 {:else if sidebar.isMobile}
 	<Sheet.Root
-		controlledOpen
 		open={sidebar.openMobile}
 		onOpenChange={sidebar.setOpenMobile}
 		{...restProps}

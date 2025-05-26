@@ -1,8 +1,7 @@
 import { z } from 'zod'
 import { titleCase } from 'title-case'
 
-import type { PaperMetadata } from '@prisma/client';
-import { PaperMetadataCreateInputObjectSchema } from "$lib/prisma/zod/schemas"
+import type { PaperMetadata } from '@prisma/client'
 
 // Use: stringToDateSchema.parse("2021-09-01T00:00:00Z")
 const stringToDateSchema = z.string().transform((val) => new Date(val))
@@ -152,3 +151,20 @@ export const arxivResponseSchema = z
 	.transform((data) => data.feed.entry)
 export type ArxivMetadataList = z.infer<typeof arxivResponseSchema>
 export type ArxivMetadata = z.infer<typeof arxivEntrySchema>
+
+/** API Schemas */
+export const paperApiBulkAddDataSchema = z.array(
+	z.object({ arxivId: z.string() }).passthrough()
+)
+
+export const paperApiRemoveDataSchema = z.object({
+	arxivIDs: z.array(z.string()),
+})
+
+export const paperApiSearchParamsSchema = z.object({
+	metadata: z
+		.union([z.literal('true'), z.literal('false'), z.boolean()])
+		.optional()
+		.transform((v) => (v === 'true' || v === true ? true : false)),
+	arxivID: z.string().optional(),
+})
