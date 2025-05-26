@@ -2,6 +2,8 @@
 
 This file expands on the quick start instructions from the project root `README.md`. It covers environment variables, package management and database commands in more depth.
 
+The `.gitignore` file excludes all generated `.svelte-kit/` directories so your working tree stays clean after building the app.
+
 ## Environment setup
 
 1. Copy `.env.example` to `.env` and adjust the values. The important variables are:
