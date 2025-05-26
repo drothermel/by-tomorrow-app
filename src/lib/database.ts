@@ -37,7 +37,7 @@ export type PaperMetadataInput = {
  */
 export async function findPaperByArxivId(arxivId: string) {
 	try {
-		const paper = await db.paperMetadataLibrary.findUnique({
+		const paper = await db.paperMetadata.findUnique({
 			where: { arxivId },
 		})
 		return paper
@@ -52,7 +52,7 @@ export async function findPaperByArxivId(arxivId: string) {
  */
 export async function addPaperMetadata(input: PaperMetadataInput) {
 	try {
-		const paper = await db.paperMetadataLibrary.upsert({
+		const paper = await db.paperMetadata.upsert({
 			where: { arxivId: input.arxivId },
 			update: {
 				published: input.published,
@@ -98,12 +98,12 @@ export async function upsertPapersInTransaction(
 ): Promise<void> {
 	await db.$transaction(async (prisma: Prisma.TransactionClient) => {
 		for (const paper of papers) {
-			const existingPaper = await prisma.paperMetadataLibrary.findUnique({
+			const existingPaper = await prisma.paperMetadata.findUnique({
 				where: { arxivId: paper.arxivId },
 			})
 
 			if (existingPaper) {
-				await prisma.paperMetadataLibrary.update({
+				await prisma.paperMetadata.update({
 					where: { arxivId: paper.arxivId },
 					data: {
 						published: new Date(paper.published),
@@ -120,7 +120,7 @@ export async function upsertPapersInTransaction(
 					},
 				})
 			} else {
-				await prisma.paperMetadataLibrary.create({
+				await prisma.paperMetadata.create({
 					data: {
 						arxivId: paper.arxivId,
 						published: new Date(paper.published),
