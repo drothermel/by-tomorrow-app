@@ -11,12 +11,30 @@
    npm run db:push
    ```
 4. Launch the dev server:
+
    ```bash
    npm run dev
    ```
+
    Visit [http://localhost:5173](http://localhost:5173) to view the app.
 
+5. Run the test suite:
+   ```bash
+   npm test
+   ```
+
 More detailed setup instructions and component documentation live in the [`docs/`](docs/) directory.
+
+## Repository layout
+
+All application code lives at the repository root:
+
+- `src/` – SvelteKit routes and components
+- `prisma/` – Prisma schema and migrations
+- `static/` – public assets served as‑is
+- `docs/` – developer documentation
+
+Build output is generated under `.svelte-kit/`. The `.gitignore` rules exclude these directories at any level so no build artifacts are committed.
 
 ## Features
 

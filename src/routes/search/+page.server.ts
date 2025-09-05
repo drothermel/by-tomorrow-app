@@ -1,6 +1,6 @@
 import type { ArxivQuery, ArxivMetadataList, SortByType } from '$lib/schemas'
 import { z } from 'zod'
-import { queryArxiv } from '$lib/components/search/arxiv.svelte'
+import { queryArxiv } from '$lib/arxiv/arxiv.svelte'
 import type { ActionData } from './types'
 import { arxivMetadataSchema } from '$lib/schemas'
 import type { PaperMetadataInput } from '$lib/database'
@@ -10,7 +10,7 @@ import logger from '$lib/logger'
 
 export const load = async () => {
         // Fetch all arxivId values from the database
-        const papers: { arxivId: string }[] = await db.paperMetadataLibrary.findMany({
+        const papers: { arxivId: string }[] = await db.paperMetadata.findMany({
                 select: {
                         arxivId: true,
                 },
@@ -44,7 +44,7 @@ export const actions = {
 		return { success: true, query, data }
 	},
 	load: async ({ request }) => {
-		const papers = await db.paperMetadataLibrary.findMany()
+		const papers = await db.paperMetadata.findMany()
 		return {
 			success: true,
 			papers,
