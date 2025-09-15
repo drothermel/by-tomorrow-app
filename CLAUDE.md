@@ -1,79 +1,116 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides project level guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Project Overview
+## 🚨 READ FIRST - DESIGN PHILOSOPHY
+**MANDATORY:** Before starting ANY work, read `docs/processes/design_philosophy.md` to understand the core principles and methodology that guide this project. All code changes must align with these principles.
 
-By Tomorrow is a SvelteKit application for organizing research papers and notes, built with TypeScript, Prisma, and TailwindCSS. The app provides workflow for searching arXiv, tagging papers, managing a personal library, and includes an experimental document editor called "Svedit".
+- **No Backward Compatibility**: This is a research library - breaking changes are acceptable for better design
+- **Fail Fast, Fail Loudly**: Use assertions, avoid defensive programming that hides bugs
+- **No Exception Handling**: Never use try-catch blocks - let errors surface immediately
+- **Assertions Over Exceptions**: Use `assert condition, "message"` instead of `raise ValueError()`
+- **Minimize Friction**: Every design choice should reduce friction between idea and visualization
+- **Embrace Change, Demand Consistency**: When making changes, update ALL affected parts
 
-## Development Commands
+Remember: The goal is code that *disappears* into the background, allowing researchers to focus on their work.
 
-### Core Development
-- `npm run dev` - Start development server with hot reloading at http://localhost:5173
-- `npm run build` - Build the application for production
-- `npm run preview` - Preview production build locally
-- `npm test` - Run test suite using Node.js built-in test runner
+## Essential Commands
+- `us` runs `uv sync` - Install all dependencies including dev, test, and test-ml groups
+- `lint` runs `uv run ruff check --fix .` - Lint code with ruff and apply autofixes where possible
+- `ft` runs `uv run ruff format .` - Format code with ruff  
+- `uv run pytest` - Run tests with pytest (supports parallel execution with xdist)
+- `lint_fix` - Run ruff format and then check with --fix
 
-### Type Checking and Linting
-- `npm run check` - Run svelte-check for TypeScript and Svelte validation
-- `npm run check:watch` - Run svelte-check in watch mode
+**IMPORTANT**: Do NOT run tests, linting, type checking, or formatting unless explicitly requested by the user. Focus on the requested changes only.
 
-### Database Management (Prisma)
-- `npm run db:push` - Push Prisma schema to database (use for development)
-- `npm run db:migrate` - Create and run migrations (use for production schema changes)
-- `npm run db:studio` - Open Prisma Studio to inspect/modify database data
-- `npm run db:start` - Start optional Postgres container via docker-compose
+## 🎯 CODE STYLE REQUIREMENTS
 
-### Package Management
-Use either `pnpm` or `npm`. The project includes `pnpm` as a dependency and uses package-lock.json.
+### Zero Comments Policy
+- **NEVER add ANY comments** - no docstrings, no inline comments, no block comments
+- Code must be self-documenting through clear naming and structure
+- Remove ALL existing comments when editing files (docstrings, # comments, etc.)
 
-## Architecture
+### Comprehensive Typing
+- **ALL function signatures** must have complete type hints for parameters and return values
+- Use `from typing import Any, Optional` etc. as needed
+- Prefer `list`, `dict` etc over `List` and `Dict`
+- Add `from __future__ import annotations` and use modern type hints
+- Import types like `import pandas as pd` when using `pd.DataFrame` in hints
+- If a circular import exists, use `TYPE_CHECKING` to gate
+- All `__init__` methods must have `-> None` return type
+- All class methods need proper `self` typing context
+- Use specific types over `Any` when possible (e.g., `pd.DataFrame` not `Any`)
+- Create custom types for clarity: `type GroupKey = Tuple[Tuple[str, Any], ...]`
+- Example pattern:
+  ```python
+  def method_name(self, param: str, optional_param: Optional[int] = None) -> Dict[str, Any]:
+  ```
 
-### Database Layer (Prisma)
-- PostgreSQL/SQLite database with Prisma ORM
-- Schema generates TypeScript types via Prisma client
-- Zod schemas auto-generated from Prisma models in `src/lib/prisma/zod/`
-- Core entities: PaperMetadata, PaperData, Question, Claim, Topic, Document, Snippet, Author
-- Complex linking system between entities via integer arrays
+### File Structure
+- **ALL imports at the very top** - no imports anywhere else in the file
+- Type aliases near top after imports
+- Magic values should NEVER be hardcoded throughout, all constants be semantically named at the top of the module
+- No module-level docstrings - remove entirely
+- Class definitions without docstrings
+- Methods without docstrings but with full type hints
 
-### Frontend (SvelteKit)
-- SvelteKit with TypeScript and Svelte 5
-- File-based routing in `src/routes/`
-- Component library: Melt UI (@melt-ui/svelte) + bits-ui + custom UI components
-- Styling: TailwindCSS with tailwind-variants for component styling
-- Main routes: `/` (home), `/search` (arXiv search), `/library` (paper management), `/reader` (PDF viewer), `/files` (file management)
+### Replace Comments with Structure
+- **Instead of comments** → Extract succinctly named helper functions
+- **Instead of complex types** → Create descriptive type aliases
+- Examples:
+  ```python
+  # BAD: Complex code with comments
+  def process_data(self, data):
+      # Convert categorical columns to numeric for ML processing
+      processed = data.copy()
+      # ... complex logic ...
+      
+  # GOOD: Self-documenting through function names and types
+  type CategoricalColumns = List[str]
+  type NumericData = pd.DataFrame
+  
+  def process_data(self, data: pd.DataFrame) -> NumericData:
+      return self._convert_categorical_to_numeric(data)
+      
+  def _convert_categorical_to_numeric(self, data: pd.DataFrame) -> NumericData:
+      # Clear, focused function that explains itself
+  ```
 
-### Key Libraries & Frameworks
-- **SvelteKit**: Full-stack framework with server-side rendering
-- **Prisma**: Database ORM with auto-generated client and Zod schemas
-- **Melt UI**: Headless UI components for Svelte
-- **TailwindCSS**: Utility-first CSS framework
-- **Cheerio**: Server-side HTML parsing for arXiv data
-- **marked**: Markdown parsing
-- **mupdf**: PDF processing (optional dependency with placeholder types)
+### Fail Fast and Loud: Asserts Not Try-Except
+- **Always aim to check assumptions with asserts**
+- Avoid nested try-except blocks
+- Instead, identify assumptions and assert them at the top of the function
 
-### Component Structure
-- UI components in `src/lib/components/ui/` (tabs, sidebar, etc.)
-- Application-specific components in `src/lib/components/`
-- Shared utilities in `src/lib/utils.ts`
-- Logging utility in `src/lib/logger.ts`
-- Schema definitions in `src/lib/schemas.ts`
+## 🛠️ DEVELOPMENT WORKFLOW
 
-### Special Considerations
-- PDF viewer requires optional `mupdf` package - placeholder types exist in `src/mupdf.d.ts`
-- Generated Prisma Zod schemas excluded from TypeScript compilation
-- Environment variables for database URL and logging configuration
-- Docker Compose setup available for PostgreSQL development
+### When Editing Files
+1. **Read design philosophy first** - understand the core method principles
+2. **Strip ALL comments** - docstrings, inline comments, everything
+3. **Add comprehensive type hints** - every parameter, every return value
+4. **Extract helper functions** - instead of complex inline logic with comments
+5. **Import required typing modules** - add to imports as needed
+6. **Test functionality** - ensure no behavioral changes from refactoring
 
-## Environment Setup
+### Code Quality Gates
+- **Use type hints** on all functions
+- **ALL imports at file top** - never mid-file, never in functions, never anywhere else
+- **Use assertions, not exceptions** - single line `assert condition, "message"` instead of try-catch or raising exceptions
+- **Never use try-catch blocks** - let errors bubble up; use assertions for validation
+- **Show full modified functions**, not just diffs
+- **Prefer explicit code** over clever code
+- **Follow "Leave No Trace"** - remove all legacy patterns when making changes
 
-1. Copy `.env.example` to `.env` and configure:
-   - `DATABASE_URL` - Prisma database connection (defaults to SQLite)
-   - `VITE_ENABLE_LOGGING` - Enable/disable logger output
-2. Install dependencies: `pnpm install` or `npm install`
-3. Initialize database: `npm run db:push`
-4. Start development: `npm run dev`
+### Git Shortcuts
+| Shortcut | Command | Use |
+|----------|---------|-----|
+| `gst` | `git status` | Check state |
+| `gd_agent` | `git --no-pager diff` | See changes |
+| `glo` | `git log --oneline -10` | Recent commits |
+| `ga .` | `git add .` | Stage files |
+| `gc -m "msg"` | `git commit -m "msg"` | Commit |
 
-## Testing
-
-The project uses Node.js built-in test runner. Run tests with `npm test`. Test files should be in the `tests/` directory.
+### 📋 COMMIT STRATEGY
+- **Small, semantic commits**: 20-30 lines per commit with clear purpose
+- **Single line messages**: Succinct and clear, imperative mood
+- **Quality gates**: Run linting/formatting before commits only when explicitly requested
+- **Incremental building**: Each commit should be reviewable and complete
