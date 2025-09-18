@@ -83,6 +83,11 @@ def get_data_60M_pile():
         print(">> Filtering the df")
         df = df[df["params"].isin(["60M"])]
         df = df[df["metric"] == "pile-valppl"]
+        df = df.pivot(
+            index=["params", "step", "tokens", "data", "compute"],
+            columns="metric",
+            values="value",
+        ).reset_index()
         print(">> Converting to records and returning")
         chart_data = df.to_dict("records")
         print(">> Converted the df to dict:", len(chart_data))
@@ -106,6 +111,11 @@ def get_data():
     try:
         print(">> Loading the mean_eval melted parquet file")
         df = pd.read_parquet(DF_1)
+        df = df.pivot(
+            index=["params", "step", "tokens", "data", "compute"],
+            columns="metric",
+            values="value",
+        ).reset_index()
         chart_data = df.to_dict("records")
         print(">> Converted the df to dict:", len(chart_data))
         return {
