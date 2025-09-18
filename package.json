@@ -38,9 +38,13 @@
 		"vite": "^5.4.19"
 	},
 	"dependencies": {
+		"@layerstack/tailwind": "^2.0.0-next.17",
 		"@prisma/client": "^6.8.2",
 		"@zerodevx/svelte-json-view": "^1.0.11",
 		"cheerio": "^1.0.0",
+		"d3-array": "^3.2.4",
+		"d3-scale": "^4.0.2",
+		"layerchart": "^2.0.0-next.38",
 		"marked": "^15.0.12",
 		"mupdf": "^1.3.6",
 		"pnpm": "^10.11.0",

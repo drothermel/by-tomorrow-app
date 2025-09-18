@@ -1,11 +1,15 @@
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+CORS_ORIGINS = os.getenv("CORS_ORIGINS", "https://bytomorrow.app").split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://bytomorrow.app", "https://www.bytomorrow.ap"],
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
