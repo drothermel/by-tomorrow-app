@@ -58,6 +58,7 @@ def get_data_ft():
         print(">> Loading the combined pickle file")
         df = pd.read_pickle(DF_2)
         df["timestamp"] = df["timestamp"].dt.strftime("%Y-%m-%d %H:%M:%S")
+        df = df.where(pd.notnull(df), None)
         chart_data = df.to_dict("records")
         print(">> Converted the df to dict:", len(chart_data))
         return {
@@ -87,6 +88,7 @@ def get_data_unmelted():
             values="value",
         ).reset_index()
         print(">> Converting to records and returning")
+        df = df.where(pd.notnull(df), None)
         chart_data = df.to_dict("records")
         print(">> Converted the df to dict:", len(chart_data))
         return {
@@ -135,6 +137,7 @@ def get_data():
     try:
         print(">> Loading the mean_eval melted parquet file")
         df = pd.read_parquet(DF_1)
+        df = df.where(pd.notnull(df), None)
         chart_data = df.to_dict("records")
         print(">> Converted the df to dict:", len(chart_data))
         return {
