@@ -2,9 +2,31 @@
     import { onMount } from 'svelte'
     import { Chart, Layer, Axis, Points, Spline, LineChart } from 'layerchart'
     import { curveMonotoneX } from 'd3-shape'
+    import { Grid } from 'wx-svelte-grid'
 
     let chartData: any[] = []
     let loading = true
+
+    const columns = [
+        {
+            id: "params",
+            header: [
+                { text: "Model Information", colspan: 2, collapsible: true, collapsed: false },
+                { text: "Parameters" }
+            ],
+            width: 150,
+            sort: true
+        },
+        {
+            id: "value",
+            header: [
+                { text: "" },
+                { text: "Pile Val PPL" }
+            ],
+            width: 150,
+            sort: true
+        }
+    ]
 
     function parseParameterSize(paramStr: string): number {
         const match = paramStr.match(/^(\d+(?:\.\d+)?)(M|B|K|T)?$/i)
@@ -57,6 +79,13 @@
                 points
             >
             </LineChart>
+        </div>
+
+        <div class="mt-8">
+            <h2 class="text-xl font-semibold mb-4">Data Table</h2>
+            <div class="border rounded-sm">
+                <Grid data={chartData} {columns} />
+            </div>
         </div>
     {:else}
     <p>No data available</p>

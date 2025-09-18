@@ -2,7 +2,6 @@ import os
 from datetime import datetime
 
 import pandas as pd
-import sh
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import Column, DateTime, Integer, String, Text, create_engine
@@ -53,15 +52,71 @@ def health():
     return {"status": "ok", "message": "FastAPI backend running"}
 
 
+@app.get("/api/visualize/data/ft")
+def get_data_ft():
+    try:
+        print(">> Loading the combined pickle file")
+        df = pd.read_pickle(DF_2)
+        chart_data = df.to_dict("records")
+        print(">> Converted the df to dict:", len(chart_data))
+        return {
+            "data": chart_data,
+        }
+    except Exception as e:
+        print("Error loading df 1")
+        print(e)
+        return {
+            "data": [
+                {"params": "60M", "value": 0.75},
+                {"params": "60M", "value": 0.82},
+                {"params": "6B", "value": 0.05},
+            ],
+        }
+
+
+@app.get("/api/visualize/data/60M_pile")
+def get_data_60M_pile():
+    try:
+        print(">> Loading the mean_eval melted parquet file")
+        df = pd.read_parquet(DF_1)
+        print(">> Filtering the df")
+        df = df[df["params"].isin(["60M"])]
+        df = df[df["metric"] == "pile-valppl"]
+        print(">> Converting to records and returning")
+        chart_data = df.to_dict("records")
+        print(">> Converted the df to dict:", len(chart_data))
+        return {
+            "data": chart_data,
+        }
+    except Exception as e:
+        print("Error loading df 1")
+        print(e)
+        return {
+            "data": [
+                {"params": "60M", "value": 0.75},
+                {"params": "60M", "value": 0.82},
+                {"params": "6B", "value": 0.05},
+            ],
+        }
+
+
 @app.get("/api/visualize/data")
 def get_data():
-    print(">> Looking for the data")
-    print(sh.ls())
-    print(DF_1, os.path.exists(DF_1))
-    print(DF_2, os.path.exists(DF_2))
-    print(">> Load df 1")
     try:
-        df_1 = pd.read_parquet(DF_1)
+        print(">> Loading the mean_eval melted parquet file")
+        df = pd.read_parquet(DF_1)
+        print(">> Filtering the df")
+        df = df[df["params"].isin(["150M", "10M", "1B"])]
+        df = df[df["data"] == "Dolma1.7"]
+        df = df[df["metric"] == "pile-valppl"]
+        df = df[df["step"] == 5000]
+        print(">> Converting to records and returning")
+        chart_data = df.to_dict("records")
+        print(">> Converted the df to dict:", len(chart_data))
+        return {
+            "data": chart_data,
+            "type": "line",
+        }
     except Exception as e:
         print("Error loading df 1")
         print(e)
@@ -73,16 +128,3 @@ def get_data():
             ],
             "type": "line",
         }
-
-    print("read the df")
-    df = df_1[df_1["params"].isin(["150M", "10M", "1B"])]
-    df = df[df["data"] == "Dolma1.7"]
-    df = df[df["metric" == "pile-valppl"]]
-    df = df[df["step" == 5000]]
-    print(f"filtered the df: {df.shape}")
-    chart_data = df.to_dict("records")
-    print("converted the df to dict:", len(chart_data))
-    return {
-        "data": chart_data,
-        "type": "line",
-    }
