@@ -75,14 +75,12 @@ def get_data_ft():
         }
 
 
-@app.get("/api/visualize/data/60M_pile")
-def get_data_60M_pile():
+@app.get("/api/visualize/data/unmelted")
+def get_data_unmelted():
     try:
         print(">> Loading the mean_eval melted parquet file")
         df = pd.read_parquet(DF_1)
         print(">> Filtering the df")
-        df = df[df["params"].isin(["60M"])]
-        df = df[df["metric"] == "pile-valppl"]
         df = df.pivot(
             index=["params", "step", "tokens", "data", "compute"],
             columns="metric",
@@ -106,16 +104,37 @@ def get_data_60M_pile():
         }
 
 
+@app.get("/api/visualize/data/small")
+def get_data_small():
+    try:
+        print(">> Loading the mean_eval melted parquet file")
+        df = pd.read_parquet(DF_1)
+        df = df[df["data"] == "Dolma1.7"]
+        df = df[df["metric"] == "pile-valppl"]
+        df = df[df["step"] == 5000]
+        chart_data = df.to_dict("records")
+        print(">> Converted the df to dict:", len(chart_data))
+        return {
+            "data": chart_data,
+        }
+    except Exception as e:
+        print("Error loading df 1")
+        print(e)
+        return {
+            "data": [
+                {"params": "150M", "value": 0.75},
+                {"params": "10M", "value": 0.82},
+                {"params": "1B", "value": 0.05},
+            ],
+            "type": "line",
+        }
+
+
 @app.get("/api/visualize/data")
 def get_data():
     try:
         print(">> Loading the mean_eval melted parquet file")
         df = pd.read_parquet(DF_1)
-        df = df.pivot(
-            index=["params", "step", "tokens", "data", "compute"],
-            columns="metric",
-            values="value",
-        ).reset_index()
         chart_data = df.to_dict("records")
         print(">> Converted the df to dict:", len(chart_data))
         return {
