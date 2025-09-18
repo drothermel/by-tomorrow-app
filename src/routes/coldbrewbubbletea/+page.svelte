@@ -31,7 +31,7 @@
     // Define the additional endpoints
     const additionalEndpoints = [
         { url: '/api/visualize/data/ft', title: 'Full Finetuning + PT Data', key: 'ft' },
-        { url: '/api/visualize/data/data', title: 'Full PT Data', key: '60M_pile' }
+        { url: '/api/visualize/data', title: 'Full PT Data', key: '60M_pile' }
     ]
 
     const columns = [
