@@ -58,11 +58,13 @@ def get_data_ft():
         print(">> Loading the combined pickle file")
         df = pd.read_pickle(DF_2)
         df["timestamp"] = df["timestamp"].dt.strftime("%Y-%m-%d %H:%M:%S")
-        df = df.where(pd.notnull(df), None)
+        mask = df.isnull()
+        df[mask] = "N/A"
         chart_data = df.to_dict("records")
+        count = len(chart_data)
         print(">> Converted the df to dict:", len(chart_data))
         return {
-            "data": chart_data,
+            "data": chart_data[:count],
         }
     except Exception as e:
         print("Error loading df 1")
@@ -88,11 +90,15 @@ def get_data_unmelted():
             values="value",
         ).reset_index()
         print(">> Converting to records and returning")
-        df = df.where(pd.notnull(df), None)
+        df = df[df["data"] == "Dolma1.7"]
+        df = df[df["params"].isin(["60M", "10M", "150M", "530M", "1B"])]
+        mask = df.isnull()
+        df[mask] = "N/A"
         chart_data = df.to_dict("records")
+        count = len(chart_data)
         print(">> Converted the df to dict:", len(chart_data))
         return {
-            "data": chart_data,
+            "data": chart_data[:count],
         }
     except Exception as e:
         print("Error loading df 1")
@@ -137,11 +143,16 @@ def get_data():
     try:
         print(">> Loading the mean_eval melted parquet file")
         df = pd.read_parquet(DF_1)
-        df = df.where(pd.notnull(df), None)
+        df = df[df["data"] == "Dolma1.7"]
+        df = df[df["params"].isin(["60M", "10M", "150M", "530M", "1B"])]
+        mask = df.isnull()
+        df[mask] = "N/A"
         chart_data = df.to_dict("records")
+        count = len(chart_data)
+
         print(">> Converted the df to dict:", len(chart_data))
         return {
-            "data": chart_data,
+            "data": chart_data[:count],
         }
     except Exception as e:
         print("Error loading df 1")
