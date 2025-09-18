@@ -63,6 +63,12 @@ const config: Config = {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))',
 				},
+				surface: {
+					content: "hsl(var(--card-foreground) / <alpha-value>)",
+					100: "hsl(var(--background) / <alpha-value>)",
+					200: "hsl(var(--muted) / <alpha-value>)",
+					300: "hsl(var(--muted) / <alpha-value>)"
+				}
 			},
 			borderRadius: {
 				xl: 'calc(var(--radius) + 4px)',
