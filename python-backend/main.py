@@ -55,24 +55,16 @@ def health():
 
 @app.get("/api/visualize/data")
 def get_data():
+    print(">> Looking for the data")
+    print(sh.ls())
+    print(DF_1, os.path.exists(DF_1))
+    print(DF_2, os.path.exists(DF_2))
+    print(">> Load df 1")
     try:
-        print(">> Looking for the data")
-        print(sh.ls())
-        print(DF_1, os.path.exists(DF_1))
-        print(DF_2, os.path.exists(DF_2))
-        print(">> Load df 1")
         df_1 = pd.read_parquet(DF_1)
-        df = df_1[df_1["params"].isin(["150M", "10M", "1B"])]
-        df = df[df["data"] == "Dolma1.7"]
-        df = df[df["metric" == "pile-valppl"]]
-        df = df[df["step" == 5000]]
-        chart_data = df.to_dict("records")
-        return {
-            "data": chart_data,
-            "type": "line",
-        }
-    except (FileNotFoundError, ValueError, KeyError) as e:
-        print(f"DataDecide error: {e}")
+    except Exception as e:
+        print("Error loading df 1")
+        print(e)
         return {
             "data": [
                 {"params": "150M", "value": 0.75},
@@ -81,3 +73,16 @@ def get_data():
             ],
             "type": "line",
         }
+
+    print("read the df")
+    df = df_1[df_1["params"].isin(["150M", "10M", "1B"])]
+    df = df[df["data"] == "Dolma1.7"]
+    df = df[df["metric" == "pile-valppl"]]
+    df = df[df["step" == 5000]]
+    print(f"filtered the df: {df.shape}")
+    chart_data = df.to_dict("records")
+    print("converted the df to dict:", len(chart_data))
+    return {
+        "data": chart_data,
+        "type": "line",
+    }
