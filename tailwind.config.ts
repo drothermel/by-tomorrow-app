@@ -5,7 +5,10 @@ import typography from '@tailwindcss/typography'
 
 const config: Config = {
 	darkMode: ['class'],
-	content: ['./src/**/*.{html,js,svelte,ts}'],
+	content: [
+		'./src/**/*.{html,js,svelte,ts}',
+		'./node_modules/layerchart/dist/**/*.{html,js,svelte,ts}',
+	],
 	safelist: ['dark'],
 	theme: {
 		container: {
