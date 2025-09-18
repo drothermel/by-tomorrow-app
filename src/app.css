@@ -1,10 +1,10 @@
+@import '@layerstack/tailwind/core.css';
+@import '@layerstack/tailwind/themes/basic.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* LayerChart theme */
-@import '@layerstack/tailwind/core.css';
-@import '@layerstack/tailwind/themes/basic.css';
 
 @layer base {
   :root {
