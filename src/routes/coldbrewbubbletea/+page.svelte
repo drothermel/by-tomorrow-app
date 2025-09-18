@@ -2,7 +2,7 @@
     import { onMount } from 'svelte'
     import { Chart, Layer, Axis, Points, Spline, LineChart } from 'layerchart'
     import { curveMonotoneX } from 'd3-shape'
-    import { Grid } from 'wx-svelte-grid'
+    import { Grid, Willow } from 'wx-svelte-grid'
 
     let chartData: any[] = []
     let loading = true
@@ -84,7 +84,9 @@
         <div class="mt-8">
             <h2 class="text-xl font-semibold mb-4">Data Table</h2>
             <div class="border rounded-sm">
-                <Grid data={chartData} {columns} />
+                <Willow>
+                    <Grid data={chartData} {columns} />
+                </Willow>
             </div>
         </div>
     {:else}
