@@ -1,13 +1,16 @@
 import os
 from datetime import datetime
 
-from datadec import DataDecide
+import pandas as pd
+import sh
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import Column, DateTime, Integer, String, Text, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+DF_1 = "initial_data/mean_eval_melted.parquet"
+DF_2 = "initial_data/combined_plotting_data_matched.pkl"
 # --------------- Setup Database ---------------
 DATABASE_URL = os.getenv("DATABASE_URL")
 if DATABASE_URL:
@@ -53,15 +56,16 @@ def health():
 @app.get("/api/visualize/data")
 def get_data():
     try:
-        print("Start setting up DataDecide")
-        dd = DataDecide(data_dir="./data")
-        print("Finished setting up DataDecide")
-        df = dd.easy_index_df(
-            df_name="full_eval",
-            data="Dolma1.7",
-            params=["10M", "150M", "1B"],  # Sample model sizes
-            seed=0,
-        )
+        print(">> Looking for the data")
+        print(sh.ls())
+        print(DF_1, os.path.exists(DF_1))
+        print(DF_2, os.path.exists(DF_2))
+        print(">> Load df 1")
+        df_1 = pd.read_parquet(DF_1)
+        df = df_1[df_1["params"].isin(["150M", "10M", "1B"])]
+        df = df[df["data"] == "Dolma1.7"]
+        df = df[df["metric" == "pile-valppl"]]
+        df = df[df["step" == 5000]]
         chart_data = df.to_dict("records")
         return {
             "data": chart_data,
@@ -71,9 +75,9 @@ def get_data():
         print(f"DataDecide error: {e}")
         return {
             "data": [
-                {"params": "150M", "pile-valppl": 0.75},
-                {"params": "10M", "pile-valppl": 0.82},
-                {"params": "1B", "pile-valppl": 0.05},
+                {"params": "150M", "value": 0.75},
+                {"params": "10M", "value": 0.82},
+                {"params": "1B", "value": 0.05},
             ],
             "type": "line",
         }

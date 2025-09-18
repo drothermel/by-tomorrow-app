@@ -46,7 +46,7 @@
     {:else if chartData.length > 0}
         <div class="h-96 md:h-80 w-full p-4 border rounded-sm">
             <LineChart 
-                data={chartData} x="params" y="pile-valppl" 
+                data={chartData} x="params" y="value" 
                 props={{ 
                     spline: { curve: curveMonotoneX , class: 'stroke-2'},
                     points: { class: 'fill-primary stroke-primary' },
