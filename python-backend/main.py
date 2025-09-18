@@ -57,6 +57,7 @@ def get_data_ft():
     try:
         print(">> Loading the combined pickle file")
         df = pd.read_pickle(DF_2)
+        df["timestamp"] = df["timestamp"].dt.strftime("%Y-%m-%d %H:%M:%S")
         chart_data = df.to_dict("records")
         print(">> Converted the df to dict:", len(chart_data))
         return {
