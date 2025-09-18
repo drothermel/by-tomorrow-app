@@ -69,6 +69,7 @@
   }
 }
 
+
 @layer base {
   @font-face {
     font-family: 'geist-sans';
@@ -122,5 +123,44 @@
 		-ms-overflow-style: none;
 		scrollbar-width: none;
 	}
+
+  /* === LayerChart Theme Override === */
+
+  /* Force light theme surface colors to prevent white-on-white issues */
+  :root {
+    --color-surface-100: hsl(0 0% 100%) !important;
+    --color-surface-200: hsl(210 40% 96.1%) !important;
+    --color-surface-300: hsl(214.3 31.8% 91.4%) !important;
+    --color-surface-content: hsl(222.2 84% 4.9%) !important;
+
+    /* Override primary color for data points */
+    --color-primary: hsl(222.2 47.4% 11.2%) !important;
+    --color-primary-content: hsl(210 40% 98%) !important;
+  }
+
+  /* Prevent dark mode auto-detection from overriding chart colors */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-surface-content: hsl(222.2 84% 4.9%) !important;
+      --color-primary: hsl(222.2 47.4% 11.2%) !important;
+    }
+  }
+
+  /* Debug utilities - add .debug-colors to any element to see active color variables */
+  .debug-colors::before {
+    content:
+      "surface-content: " var(--color-surface-content)
+      " | primary: " var(--color-primary)
+      " | foreground: " var(--foreground);
+    position: absolute;
+    top: -20px;
+    left: 0;
+    font-size: 10px;
+    background: rgba(255, 255, 0, 0.8);
+    color: black;
+    padding: 2px 4px;
+    z-index: 1000;
+    white-space: nowrap;
+  }
 
 }
