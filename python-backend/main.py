@@ -70,7 +70,7 @@ def get_data_ft():
             "data": [
                 {"params": "60M", "value": 0.75},
                 {"params": "60M", "value": 0.82},
-                {"params": "6B", "value": 0.05},
+                {"params": "60M", "value": 0.05},
             ],
         }
 
@@ -96,7 +96,7 @@ def get_data_60M_pile():
             "data": [
                 {"params": "60M", "value": 0.75},
                 {"params": "60M", "value": 0.82},
-                {"params": "6B", "value": 0.05},
+                {"params": "60M", "value": 0.05},
             ],
         }
 
@@ -106,17 +106,10 @@ def get_data():
     try:
         print(">> Loading the mean_eval melted parquet file")
         df = pd.read_parquet(DF_1)
-        print(">> Filtering the df")
-        df = df[df["params"].isin(["150M", "10M", "1B"])]
-        df = df[df["data"] == "Dolma1.7"]
-        df = df[df["metric"] == "pile-valppl"]
-        df = df[df["step"] == 5000]
-        print(">> Converting to records and returning")
         chart_data = df.to_dict("records")
         print(">> Converted the df to dict:", len(chart_data))
         return {
             "data": chart_data,
-            "type": "line",
         }
     except Exception as e:
         print("Error loading df 1")
