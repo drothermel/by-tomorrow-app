@@ -10,18 +10,20 @@ from sqlalchemy.orm import sessionmaker
 
 # --------------- Setup Database ---------------
 DATABASE_URL = os.getenv("DATABASE_URL")
-engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
+if DATABASE_URL:
+    engine = create_engine(DATABASE_URL)
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    Base = declarative_base()
 
+    class VisualizationCache(Base):
+        __tablename__ = "visualization_cache"
 
-class VisualizationCache(Base):
-    __tablename__ = "visualization_cache"
-
-    id = Column(Integer, primary_key=True, index=True)
-    query_hash = Column(String(64), unique=True, index=True)
-    data_json = Column(Text)
-    created_at = Column(DateTime, default=datetime.utcnow)
+        id = Column(Integer, primary_key=True, index=True)
+        query_hash = Column(String(64), unique=True, index=True)
+        data_json = Column(Text)
+        created_at = Column(DateTime, default=datetime.utcnow)
+else:
+    print("DATABASE_URL not found, skipping db setup")
 
 
 # Create tables
@@ -42,14 +44,6 @@ app.add_middleware(
 
 # --------------- Setup API ---------------
 
-dd = None
-
-
-@app.on_event("startup")
-async def startup():
-    global dd
-    dd = DataDecide(data_dir="./data")
-
 
 @app.get("/api/health")
 def health():
@@ -59,6 +53,9 @@ def health():
 @app.get("/api/visualize/data")
 def get_data():
     try:
+        print("Start setting up DataDecide")
+        dd = DataDecide(data_dir="./data")
+        print("Finished setting up DataDecide")
         df = dd.easy_index_df(
             df_name="full_eval",
             data="Dolma1.7",
