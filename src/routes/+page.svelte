@@ -38,9 +38,15 @@
 				</p>
 			</div>
 			<div class="grid grid-cols-1 md:grid-cols-3 gap-10 items-center">
+				<Button class="text-md font-semibold" href="/data_viz">Data Viz</Button>
+				<p class="text-md md:col-span-2">
+					<strong>Data Viz</strong>: Visualize your own experimental data in a variety of ways.
+				</p>
+			</div>
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-10 items-center">
 				<Button class="text-md font-semibold" href="/editor">Editor</Button>
 				<p class="text-md md:col-span-2">
-					<strong>Note Editor</strong>: Combine your source documents, thought
+					<strong>Note Editor</strong>: Combine your source documents, experimental results, thought
 					snippets, and new ideas with a drag-and-drop doc creation editor.
 				</p>
 			</div>

@@ -5,7 +5,7 @@
 		Library,
 		SquareChartGantt,
 		PencilRuler,
-		CloudUpload,
+		ChartBar,
 	} from 'lucide-svelte'
 
 	import * as Sidebar from '$lib/components/ui/sidebar/index'
@@ -21,6 +21,11 @@
 			title: 'Home',
 			url: '/',
 			icon: House,
+		},
+		{
+			title: 'Data Viz',
+			url: '/data_viz',
+			icon: ChartBar,
 		},
 		{
 			title: 'Search',
