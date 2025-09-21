@@ -12,7 +12,7 @@
 	import * as Sidebar from '$lib/components/ui/sidebar/index'
 	import AppSidebar from '$lib/components/app-sidebar.svelte'
 	import { page } from '$app/stores'
-	import '../app.css'
+	import '$lib/../app.css'
 
 	const { children }: {children: Snippet } = $props()
 
