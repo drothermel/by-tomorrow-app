@@ -40,6 +40,7 @@
 	"dependencies": {
 		"@layerstack/tailwind": "^2.0.0-next.17",
 		"@prisma/client": "^6.8.2",
+		"@svar-ui/svelte-grid": "^2.3.0",
 		"@zerodevx/svelte-json-view": "^1.0.11",
 		"cheerio": "^1.0.0",
 		"d3-array": "^3.2.4",
@@ -52,10 +53,10 @@
 		"prettier": "3.0.0",
 		"prettier-plugin-svelte": "^3.4.0",
 		"prisma-zod-generator": "^0.8.13",
+		"svelte-clerk": "^0.17.2",
 		"svelte-radix": "^2.0.1",
 		"title-case": "^4.3.2",
 		"wx-svelte-core": "^2.2.1",
-		"wx-svelte-grid": "^2.2.0",
 		"xml-js": "^1.6.11",
 		"zod": "^3.25.28"
 	}
