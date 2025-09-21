@@ -1,8 +1,7 @@
-import <script lang="ts">
+<script lang="ts">
     import { onMount } from 'svelte'
-    import { Chart, Layer, Axis, Points, Spline, LineChart } from 'layerchart'
+    import { LineChart } from 'layerchart'
     import { curveMonotoneX } from 'd3-shape'
-    import { scaleLog } from 'd3-scale'
     import { Grid, Willow } from '@svar-ui/svelte-grid'
 
     let chartData: any[] = []
