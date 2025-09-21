@@ -20,7 +20,7 @@
 		if (!input) {
 			return ''
 		}
-		return input.toLowerCase().replace('_', ' ').replace(
+		return input.toLowerCase().replace('_', ' ').replace('-', ' ').replace(
 			/\b\w/g, (s: string) => s.toUpperCase()
 		)
 	}

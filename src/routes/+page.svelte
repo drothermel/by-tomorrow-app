@@ -24,7 +24,7 @@
 
 		<!--Mode Options-->
 		<div class="flex flex-col mx-auto gap-y-4 gap-x-8 px-4 sm:px-6 lg:px-8">
-			<div class="grid gird-cols-1 md:grid-cols-3 gap-10 items-center pb-4">
+			<div class="grid gird-cols-1 md:grid-cols-3 gap-10 items-center">
 				<Button class="text-md font-semibold" href="/search">Search</Button>
 				<p class="text-md md:col-span-2">
 					<strong>Paper Search</strong>: Start by searching arxiv for papers to save.
